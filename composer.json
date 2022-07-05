@@ -1,0 +1,17 @@
+{
+    "name": "datalinx/php-utils",
+    "description": "Collection of common helper functions",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Datalinx\\PhpUtils\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DataLinx"
+        }
+    ],
+    "require": {}
+}
