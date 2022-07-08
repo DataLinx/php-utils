@@ -1,6 +1,6 @@
 <?php
 
-namespace Datalinx\PhpUtils;
+namespace DataLinx\PhpUtils;
 
 class StringHelper
 {
@@ -11,7 +11,7 @@ class StringHelper
      * @param string $newline Newline character
      * @return string
      */
-    public static function html2plain(string $html, string $newline = PHP_EOL) : string
+    public static function html2plain(string $html, string $newline = PHP_EOL): string
     {
         // Remove all existing newlines, since they have no role in HTML
         $html = preg_replace('/\R/', '', $html);
@@ -53,15 +53,15 @@ class StringHelper
      * @param string $class HTML class for the anchor element
      * @return string
      */
-    public static function linkHashtags(string $text, string $hrefTpl, string $class = 'hashtag') : string
+    public static function linkHashtags(string $text, string $hrefTpl, string $class = 'hashtag'): string
     {
         $m = [];
 
-        if (preg_match_all('/#{1}([a-z0-9]+)/i', $text, $m))
-        {
-            foreach ($m[1] as $tag)
-            {
-                $text = preg_replace("/#{$tag}(\s|$)/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) .'" data-tag="'. $tag .'">#'. $tag .'</a> ', $text);
+
+        if (preg_match_all('/#{1}([a-z0-9]+)/i', $text, $m)) {
+            foreach ($m[1] as $tag) {
+                // TODO \s|$ tukaj manjka še en ali [string terminator] najdi regex ki nadomešča . , ! ? ; :  itd... kar konča stavek (ločila)
+                $text = preg_replace("/#$tag(\s|$)/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) .'" data-tag="'. $tag .'">#'. $tag .'</a> ', $text);
             }
         }
 
@@ -74,7 +74,7 @@ class StringHelper
      * @param string $str Input string
      * @return string snake_cased string
      */
-    public static function camel2snake(string $str) : string
+    public static function camel2snake(string $str): string
     {
         return preg_replace_callback(
             '#(^|[a-z])([A-Z])#',
@@ -82,7 +82,7 @@ class StringHelper
                 if (0 === strlen($matches[1])) {
                     $result = $matches[2];
                 } else {
-                    $result = "{$matches[1]}_{$matches[2]}";
+                    $result = "$matches[1]_$matches[2]";
                 }
                 return strtolower($result);
             },
@@ -97,11 +97,11 @@ class StringHelper
      * @param boolean $upper Capitalize the first character
      * @return string
      */
-    public static function snake2camel(string $str, $upper = TRUE)
+    public static function snake2camel(string $str, bool $upper = true)
     {
         $cc = str_replace('_', '', ucwords($str, '_'));
 
-        return $upper ? ucfirst($cc) : $cc;
+        return $upper ? $cc : lcfirst($cc);
     }
 
     /**
@@ -112,10 +112,9 @@ class StringHelper
      * @param string $str
      * @return string
      */
-    public static function cleanString($str) : string
+    public static function cleanString(string $str): string
     {
-        if ( ! empty($str))
-        {
+        if (! empty($str)) {
             return preg_replace('/\s{2,}/', ' ', trim($str));
         }
 
@@ -138,7 +137,7 @@ class StringHelper
      * @param string $address Address to split
      * @return array|null
      */
-    public static function splitAddress($address) : ?array
+    public static function splitAddress(string $address): ?array
     {
         $m = [];
 
@@ -149,8 +148,7 @@ class StringHelper
         $separator = '[ \/]*'; // Zero or more spaces or slashes
         $house_number = '\d+[ \/]*[a-z]?'; // Starts with a digit, is optionally separated with a space or slash and has a single trailing letter
 
-        if (preg_match("/^($street_name)$separator($house_number)$/i", $address, $m))
-        {
+        if (preg_match("/^($street_name)$separator($house_number)$/i", $address, $m)) {
             return [
                 trim($m[1], ','), // Trim any commas trailing the "street name"
                 $m[2],
@@ -166,14 +164,14 @@ class StringHelper
      * @param int|string $num
      * @return string
      */
-    public static function int2roman($num) : string
+    public static function int2roman($num): string
     {
         // Make sure that we only use the integer portion of the value
         $n = intval($num);
         $result = '';
 
         // Declare a lookup array that we will use to traverse the number:
-        $lookup = array(
+        $lookup = [
             'M'		=> 1000,
             'CM'	=> 900,
             'D'		=> 500,
@@ -186,18 +184,17 @@ class StringHelper
             'IX'	=> 9,
             'V'		=> 5,
             'IV'	=> 4,
-            'I'		=> 1
-        );
+            'I'		=> 1,
+        ];
 
-        foreach ($lookup as $roman => $value)
-        {
+        foreach ($lookup as $roman => $value) {
             // Determine the number of matches
             $matches = intval($n / $value);
 
             // Store that many characters
             $result .= str_repeat($roman, $matches);
 
-            // Substract that from the number
+            // Subtract that from the number
             $n = $n % $value;
         }
 

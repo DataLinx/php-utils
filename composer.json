@@ -7,12 +7,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Datalinx\\PhpUtils\\": "src/"
+            "DataLinx\\PhpUtils\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Datalinx\\PhpUtils\\Tests": "tests/"
+            "DataLinx\\PhpUtils\\Tests\\": "tests/"
         }
     },
     "authors": [
