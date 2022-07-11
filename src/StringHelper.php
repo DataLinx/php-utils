@@ -21,11 +21,15 @@ class StringHelper
             '<br>',
             '<br/>',
             '<br />',
+            '</p><p>',
             '<p>',
+            '</p>',
         ], [
             $newline,
             $newline,
             $newline,
+            $newline . $newline,
+            $newline . $newline,
             $newline . $newline,
         ], $html);
 
@@ -57,11 +61,9 @@ class StringHelper
     {
         $m = [];
 
-
-        if (preg_match_all('/#{1}([a-z0-9]+)/i', $text, $m)) {
+        if (preg_match_all('/#([a-z0-9]+)/i', $text, $m)) {
             foreach ($m[1] as $tag) {
-                // TODO \s|$ tukaj manjka še en ali [string terminator] najdi regex ki nadomešča . , ! ? ; :  itd... kar konča stavek (ločila)
-                $text = preg_replace("/#$tag(\s|$)/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) .'" data-tag="'. $tag .'">#'. $tag .'</a> ', $text);
+                $text = preg_replace("/#$tag/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) .'" data-tag="'. $tag .'">#'. $tag .'</a>', $text);
             }
         }
 

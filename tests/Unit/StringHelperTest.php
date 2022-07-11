@@ -19,7 +19,15 @@ class StringHelperTest extends TestCase
 
         $this->assertEquals($expectedText, StringHelper::html2plain($sampleHtml));
 
-        // TODO Add more cases for other line break variants
+        $sampleHtml = "This is the first line break.<br>This is the second line break.<br/>And this is the third one.<br />";
+        $expectedText = "This is the first line break.\nThis is the second line break.\nAnd this is the third one.";
+
+        $this->assertEquals($expectedText, StringHelper::html2plain($sampleHtml));
+
+        $sampleHtml = "  <p>This is a test paragraph.</p>No paragraph.  ";
+        $expectedText = "This is a test paragraph.\n\nNo paragraph.";
+
+        $this->assertEquals($expectedText, StringHelper::html2plain($sampleHtml));
     }
 
     public function testLinkHashtags()
@@ -27,11 +35,20 @@ class StringHelperTest extends TestCase
         $cases = [
             "#this is something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"this\">#this</a> is something",
             "this #is something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a> something",
-            "this is #something" => "this is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a> ",
-            "#this is #something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"this\">#this</a> is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a> ",
-            "#something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a> ",
+            "this is #something" => "this is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>",
+            "#this is #something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"this\">#this</a> is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>",
+            "#something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>",
             "this is something" => "this is something",
             "" => "",
+            "this #is. something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>. something",
+            "this #is, something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>, something",
+            "this #is; something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>; something",
+            "this #is? something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>? something",
+            "this #is! something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>! something",
+            "this #is: something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>: something",
+            "this is #something!" => "this is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>!",
+            "#this? is #something," => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"this\">#this</a>? is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>,",
+            "this #is... something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>... something",
         ];
 
         foreach ($cases as $case => $expected) {
@@ -69,6 +86,7 @@ class StringHelperTest extends TestCase
             "Johnny  Bravo  " => "Johnny Bravo",
             "  Johnny Bravo" => "Johnny Bravo",
             "  Danny Robinson    " => "Danny Robinson",
+            "" => "",
         ];
 
         foreach ($cases as $case => $expected) {
