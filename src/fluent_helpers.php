@@ -1,0 +1,41 @@
+<?php
+
+use DataLinx\PhpUtils\Fluent\FluentArray;
+use DataLinx\PhpUtils\Fluent\FluentNumber;
+use DataLinx\PhpUtils\Fluent\FluentString;
+
+if (! function_exists('num'))
+{
+    /**
+     * Create a new FluentNumber object
+     *
+     * @param float|int|string $value
+     * @return FluentNumber
+     */
+    function num($value): FluentNumber
+    {
+        return new FluentNumber($value);
+    }
+}
+
+if (! function_exists('str'))
+{
+    /**
+     * Create a new FluentString object
+     *
+     * @param string $value
+     * @return FluentString
+     */
+    function str(string $value): FluentString
+    {
+        return new FluentString($value);
+    }
+}
+
+if (! function_exists('arr'))
+{
+    function arr(array $arr): FluentArray
+    {
+        return new FluentArray($arr);
+    }
+}

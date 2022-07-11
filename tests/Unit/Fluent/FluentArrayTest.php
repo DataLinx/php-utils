@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace DataLinx\PhpUtils\Tests\Unit;
+namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
-use DataLinx\PhpUtils\ArrayHelper;
 use PHPUnit\Framework\TestCase;
 
-class ArrayHelperTest extends TestCase
+require_once './src/fluent_helpers.php';
+
+class FluentArrayTest extends TestCase
 {
     /**
      * @return void
@@ -21,7 +22,9 @@ class ArrayHelperTest extends TestCase
         ];
 
         foreach ($cases as $case) {
-            $this->assertEquals($case["expected"], ArrayHelper::flatten($case["input"]));
+            $this->assertEquals($case["expected"], arr($case["input"])->flatten()->getArray());
         }
+
+        // TODO Add test for the case when the target array is passed
     }
 }

@@ -1,20 +1,54 @@
 <?php
 
-namespace DataLinx\PhpUtils;
+namespace DataLinx\PhpUtils\Fluent;
 
-class StringHelper
+class FluentString
 {
+    protected string $value;
+
+    /**
+     * Create a FluentString object
+     *
+     * @param string $value
+     */
+    public function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string $value
+     * @return FluentString
+     */
+    public function setValue(string $value): FluentString
+    {
+        $this->value = $value;
+        return $this;
+    }
+    
     /**
      * Best-effort conversion of HTML to plain text
      *
-     * @param string $html HTML text
      * @param string $newline Newline character
-     * @return string
+     * @return $this
      */
-    public static function html2plain(string $html, string $newline = PHP_EOL): string
+    public function htmlToPlain(string $newline = PHP_EOL): self
     {
         // Remove all existing newlines, since they have no role in HTML
-        $html = preg_replace('/\R/', '', $html);
+        $html = preg_replace('/\R/', '', $this->value);
 
         // Replace breaks and paragraphs with newlines
         $html = str_replace([
@@ -33,7 +67,9 @@ class StringHelper
             $newline . $newline,
         ], $html);
 
-        return trim(strip_tags($html));
+        $this->value = trim(strip_tags($html));
+
+        return $this;
     }
 
     /**
@@ -52,33 +88,31 @@ class StringHelper
      * Check out these <a href="https://www.instagram.com/holiday" class="hashtag" data-tag="holiday">#holiday</a> gift ideas!
      * </pre>
      *
-     * @param string $text Text with hashtags
      * @param string $hrefTpl Link template with {tag} placeholder, e.g. https://www.example.com/{tag}
      * @param string $class HTML class for the anchor element
-     * @return string
+     * @return $this
      */
-    public static function linkHashtags(string $text, string $hrefTpl, string $class = 'hashtag'): string
+    public function linkHashtags(string $hrefTpl, string $class = 'hashtag'): self
     {
         $m = [];
 
-        if (preg_match_all('/#([a-z0-9]+)/i', $text, $m)) {
+        if (preg_match_all('/#([a-z0-9]+)/i', $this->value, $m)) {
             foreach ($m[1] as $tag) {
-                $text = preg_replace("/#$tag/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) .'" data-tag="'. $tag .'">#'. $tag .'</a>', $text);
+                $this->value = preg_replace("/#$tag/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) .'" data-tag="'. $tag .'">#'. $tag .'</a>', $this->value);
             }
         }
 
-        return $text;
+        return $this;
     }
 
     /**
      * Convert a string from camelCase or PascalCase to snake_case
      *
-     * @param string $str Input string
-     * @return string snake_cased string
+     * @return $this
      */
-    public static function camel2snake(string $str): string
+    public function camelToSnake(): self
     {
-        return preg_replace_callback(
+        $this->value = preg_replace_callback(
             '#(^|[a-z])([A-Z])#',
             function (array $matches) {
                 if (0 === strlen($matches[1])) {
@@ -88,22 +122,27 @@ class StringHelper
                 }
                 return strtolower($result);
             },
-            $str
+            $this->value
         );
+
+        return $this;
     }
 
     /**
      * Convert a string from snake_case to camelCase or UpperCamelCase/PascalCase
      *
-     * @param string $str Input string
      * @param boolean $upper Capitalize the first character
-     * @return string
+     * @return $this
      */
-    public static function snake2camel(string $str, bool $upper = true)
+    public function snakeToCamel(bool $upper = true): self
     {
-        $cc = str_replace('_', '', ucwords($str, '_'));
+        $this->value = str_replace('_', '', ucwords($this->value, '_'));
 
-        return $upper ? $cc : lcfirst($cc);
+        if (! $upper) {
+            $this->value = lcfirst($this->value);
+        }
+
+        return $this;
     }
 
     /**
@@ -111,16 +150,15 @@ class StringHelper
      * - replace any occurrence of 2+ spaces with a single space
      * - trim the string
      *
-     * @param string $str
-     * @return string
+     * @return $this
      */
-    public static function cleanString(string $str): string
+    public function clean(): self
     {
-        if (! empty($str)) {
-            return preg_replace('/\s{2,}/', ' ', trim($str));
+        if (! empty($this->value)) {
+            $this->value = preg_replace('/\s{2,}/', ' ', trim($this->value));
         }
 
-        return $str;
+        return $this;
     }
 
     /**
@@ -136,15 +174,14 @@ class StringHelper
      *
      * If the split is not successful, null is returned.
      *
-     * @param string $address Address to split
      * @return array|null
      */
-    public static function splitAddress(string $address): ?array
+    public function toAddressArray(): ?array
     {
         $m = [];
 
         // Sanitize the address - remove double spaces, trim trailing dots and commas
-        $address = self::cleanString(trim($address, '.,'));
+        $address = trim($this->clean(), '.,');
 
         $street_name = '.+[.,a-z]+'; // Any string that ends with a dot, comma or letter
         $separator = '[ \/]*'; // Zero or more spaces or slashes
@@ -158,49 +195,5 @@ class StringHelper
         }
 
         return null;
-    }
-
-    /**
-     * Convert an integer number to roman notation
-     * C/P from http://www.go4expert.com/forums/showthread.php?t=4948
-     * @param int|string $num
-     * @return string
-     */
-    public static function int2roman($num): string
-    {
-        // Make sure that we only use the integer portion of the value
-        $n = intval($num);
-        $result = '';
-
-        // Declare a lookup array that we will use to traverse the number:
-        $lookup = [
-            'M'		=> 1000,
-            'CM'	=> 900,
-            'D'		=> 500,
-            'CD'	=> 400,
-            'C'		=> 100,
-            'XC'	=> 90,
-            'L'		=> 50,
-            'XL'	=> 40,
-            'X'		=> 10,
-            'IX'	=> 9,
-            'V'		=> 5,
-            'IV'	=> 4,
-            'I'		=> 1,
-        ];
-
-        foreach ($lookup as $roman => $value) {
-            // Determine the number of matches
-            $matches = intval($n / $value);
-
-            // Store that many characters
-            $result .= str_repeat($roman, $matches);
-
-            // Subtract that from the number
-            $n = $n % $value;
-        }
-
-        // The Roman numeral should be built, return it
-        return $result;
     }
 }
