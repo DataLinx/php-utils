@@ -38,7 +38,7 @@ class FluentString
         $this->value = $value;
         return $this;
     }
-    
+
     /**
      * Best-effort conversion of HTML to plain text
      *
