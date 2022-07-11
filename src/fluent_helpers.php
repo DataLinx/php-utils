@@ -4,8 +4,7 @@ use DataLinx\PhpUtils\Fluent\FluentArray;
 use DataLinx\PhpUtils\Fluent\FluentNumber;
 use DataLinx\PhpUtils\Fluent\FluentString;
 
-if (! function_exists('num'))
-{
+if (! function_exists('num')) {
     /**
      * Create a new FluentNumber object
      *
@@ -18,8 +17,7 @@ if (! function_exists('num'))
     }
 }
 
-if (! function_exists('str'))
-{
+if (! function_exists('str')) {
     /**
      * Create a new FluentString object
      *
@@ -32,8 +30,7 @@ if (! function_exists('str'))
     }
 }
 
-if (! function_exists('arr'))
-{
+if (! function_exists('arr')) {
     function arr(array $arr): FluentArray
     {
         return new FluentArray($arr);
