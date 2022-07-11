@@ -117,4 +117,17 @@ class FluentStringTest extends TestCase
             $this->assertEquals($expected, str($input)->toAddressArray());
         }
     }
+
+    public function testParsePlaceholders()
+    {
+        $subject = 'Hello, {name} from {place}!';
+        $placeholders = [
+            'name' => 'George',
+            'place' => 'the Jungle',
+        ];
+
+        $this->assertEquals('Hello, George from the Jungle!', str($subject)->parsePlaceholders($placeholders));
+
+        // TODO Test case with different encoding
+    }
 }

@@ -196,4 +196,46 @@ class FluentString
 
         return null;
     }
+
+    /**
+     * Parse text placeholders in curly braces. This ensures correct encoding on the operated strings.
+     *
+     * Provide the string as:
+     * <code>
+     *  Some sample text with {some_placeholder}.
+     * </code
+     *
+     * Provide the array as:
+     * <code>
+     *  array(
+     *      'some_placeholder' => 'some final value'
+     *  )
+     * </code>
+     *
+     * The processed string will then be:
+     * <code>
+     *  Some sample text with some final value.
+     * </code>
+     *
+     * @param array $placeholders
+     * @return $this
+     */
+    public function parsePlaceholders(array $placeholders)
+    {
+        $from = [];
+        $to = [];
+
+        if (mb_detect_encoding($this->value) !== 'UTF-8') {
+            $this->value = mb_convert_encoding($this->value, 'UTF-8');
+        }
+
+        foreach ($placeholders as $key => $val) {
+            $from[] = '{'. (mb_detect_encoding($key) != 'UTF-8' ? mb_convert_encoding($key, 'UTF-8') : $key) .'}';
+            $to[] = mb_detect_encoding($val) != 'UTF-8' ? mb_convert_encoding($val, 'UTF-8') : $val;
+        }
+
+        $this->value = str_replace($from, $to, $this->value);
+
+        return $this;
+    }
 }
