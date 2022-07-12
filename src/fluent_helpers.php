@@ -1,6 +1,7 @@
 <?php
 
 use DataLinx\PhpUtils\Fluent\FluentArray;
+use DataLinx\PhpUtils\Fluent\FluentBarcode;
 use DataLinx\PhpUtils\Fluent\FluentNumber;
 use DataLinx\PhpUtils\Fluent\FluentString;
 
@@ -34,5 +35,21 @@ if (! function_exists('arr')) {
     function arr(array $arr): FluentArray
     {
         return new FluentArray($arr);
+    }
+}
+
+if (! function_exists('barcode')) {
+
+    /**
+     * Create a new FluentBarcode object
+     *
+     * @param string $code Code to display
+     * @param string|null $type Barcode type (defaults to EAN13)
+     * @return FluentBarcode
+     * @throws Exception
+     */
+    function barcode(string $code, string $type = null): FluentBarcode
+    {
+        return new FluentBarcode($code, $type);
     }
 }
