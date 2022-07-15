@@ -10,6 +10,33 @@ require './src/fluent_helpers.php';
 
 class FluentNumberTest extends TestCase
 {
+    /**
+     * @return void
+     */
+    public function testSetAndGet()
+    {
+        $amount = num(123);
+
+        $this->assertEquals(123, $amount->getValue());
+
+        $amount->setValue(22.55);
+
+        $this->assertEquals(22.55, $amount->getValue());
+    }
+
+    /**
+     * @return void
+     */
+    public function testToString()
+    {
+        $amount = num(55);
+
+        $this->assertEquals("5545", $amount . 45);
+    }
+
+    /**
+     * @return void
+     */
     public function testToRoman()
     {
         $cases = [

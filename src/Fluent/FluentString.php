@@ -98,7 +98,7 @@ class FluentString
 
         if (preg_match_all('/#([a-z0-9]+)/i', $this->value, $m)) {
             foreach ($m[1] as $tag) {
-                $this->value = preg_replace("/#$tag/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) .'" data-tag="'. $tag .'">#'. $tag .'</a>', $this->value);
+                $this->value = preg_replace("/#$tag/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) . $tag . '" data-tag="'. $tag .'">#'. $tag .'</a>', $this->value);
             }
         }
 
@@ -188,9 +188,17 @@ class FluentString
         $house_number = '\d+[ \/]*[a-z]?'; // Starts with a digit, is optionally separated with a space or slash and has a single trailing letter
 
         if (preg_match("/^($street_name)$separator($house_number)$/i", $address, $m)) {
+
+            $m[1] = trim($m[1], ","); // Trim any commas trailing the "street name"
+
+            // Remove house number duplicates if present
+            if (preg_match("/(" . preg_quote($m[2], "/") . ")$/i", $m[1])) {
+                $m[1] = trim(substr($m[1], 0, -mb_strlen($m[2])));
+            }
+
             return [
-                trim($m[1], ','), // Trim any commas trailing the "street name"
-                $m[2],
+                $m[1],
+                str_replace(' ', '', $m[2]), // Remove all spaces in the house number
             ];
         }
 
@@ -234,7 +242,7 @@ class FluentString
             $to[] = mb_detect_encoding($val) != 'UTF-8' ? mb_convert_encoding($val, 'UTF-8') : $val;
         }
 
-        $this->value = str_replace($from, $to, $this->value);
+        $this->value = mb_convert_encoding(str_replace($from, $to, $this->value), 'UTF-8');
 
         return $this;
     }

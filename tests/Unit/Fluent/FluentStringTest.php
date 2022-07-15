@@ -10,50 +10,59 @@ require_once './src/fluent_helpers.php';
 
 class FluentStringTest extends TestCase
 {
-    public function testHtml2Plain()
+    /**
+     * @return void
+     */
+    public function testSetAndGet()
     {
-        // TODO Put all samples and expected results in an array
-        $sampleHtml = "<p>This is a test paragraph.</p>";
-        $expectedText = "This is a test paragraph.";
+        $sentence = str("First string");
 
-        $this->assertEquals($expectedText, str($sampleHtml)->htmlToPlain());
+        $this->assertEquals("First string", $sentence->getValue());
 
-        $sampleHtml = "<p>This is a test paragraph.</p><p>This is another paragraph,<br/>but it has a line break.</p>";
-        $expectedText = "This is a test paragraph.\n\nThis is another paragraph,\nbut it has a line break.";
+        $sentence->setValue("Second string");
 
-        $this->assertEquals($expectedText, str($sampleHtml)->htmlToPlain());
-
-        $sampleHtml = "This is the first line break.<br>This is the second line break.<br/>And this is the third one.<br />";
-        $expectedText = "This is the first line break.\nThis is the second line break.\nAnd this is the third one.";
-
-        $this->assertEquals($expectedText, str($sampleHtml)->htmlToPlain());
-
-        $sampleHtml = "  <p>This is a test paragraph.</p>No paragraph.  ";
-        $expectedText = "This is a test paragraph.\n\nNo paragraph.";
-
-        $this->assertEquals($expectedText, str($sampleHtml)->htmlToPlain());
+        $this->assertEquals("Second string", $sentence->getValue());
     }
 
+    /**
+     * @return void
+     */
+    public function testHtml2Plain()
+    {
+        $cases = [
+            ["input" => "<p>This is a test paragraph.</p>", "expected" => "This is a test paragraph."],
+            ["input" => "<p>This is a test paragraph.</p><p>This is another paragraph,<br/>but it has a line break.</p>", "expected" => "This is a test paragraph.\n\nThis is another paragraph,\nbut it has a line break."],
+            ["input" => "This is the first line break.<br>This is the second line break.<br/>And this is the third one.<br />", "expected" => "This is the first line break.\nThis is the second line break.\nAnd this is the third one."],
+            ["input" => "  <p>This is a test paragraph.</p>No paragraph.  ", "expected" => "This is a test paragraph.\n\nNo paragraph."],
+        ];
+
+        foreach ($cases as $case) {
+            $this->assertEquals($case["expected"], str($case["input"])->htmlToPlain());
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function testLinkHashtags()
     {
-        // TODO Fix all anchor hrefs - they should include the tag
         $cases = [
-            "#this is something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"this\">#this</a> is something",
-            "this #is something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a> something",
-            "this is #something" => "this is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>",
-            "#this is #something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"this\">#this</a> is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>",
-            "#something" => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>",
+            "#this is something" => "<a class=\"hashtag\" href=\"https://www.example.com/this\" data-tag=\"this\">#this</a> is something",
+            "this #is something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a> something",
+            "this is #something" => "this is <a class=\"hashtag\" href=\"https://www.example.com/something\" data-tag=\"something\">#something</a>",
+            "#this is #something" => "<a class=\"hashtag\" href=\"https://www.example.com/this\" data-tag=\"this\">#this</a> is <a class=\"hashtag\" href=\"https://www.example.com/something\" data-tag=\"something\">#something</a>",
+            "#something" => "<a class=\"hashtag\" href=\"https://www.example.com/something\" data-tag=\"something\">#something</a>",
             "this is something" => "this is something",
             "" => "",
-            "this #is. something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>. something",
-            "this #is, something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>, something",
-            "this #is; something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>; something",
-            "this #is? something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>? something",
-            "this #is! something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>! something",
-            "this #is: something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>: something",
-            "this is #something!" => "this is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>!",
-            "#this? is #something," => "<a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"this\">#this</a>? is <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"something\">#something</a>,",
-            "this #is... something" => "this <a class=\"hashtag\" href=\"https://www.example.com/\" data-tag=\"is\">#is</a>... something",
+            "this #is. something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a>. something",
+            "this #is, something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a>, something",
+            "this #is; something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a>; something",
+            "this #is? something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a>? something",
+            "this #is! something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a>! something",
+            "this #is: something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a>: something",
+            "this is #something!" => "this is <a class=\"hashtag\" href=\"https://www.example.com/something\" data-tag=\"something\">#something</a>!",
+            "#this? is #something," => "<a class=\"hashtag\" href=\"https://www.example.com/this\" data-tag=\"this\">#this</a>? is <a class=\"hashtag\" href=\"https://www.example.com/something\" data-tag=\"something\">#something</a>,",
+            "this #is... something" => "this <a class=\"hashtag\" href=\"https://www.example.com/is\" data-tag=\"is\">#is</a>... something",
         ];
 
         foreach ($cases as $case => $expected) {
@@ -61,6 +70,9 @@ class FluentStringTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testCamel2Snake()
     {
         $cases = [
@@ -73,6 +85,9 @@ class FluentStringTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testSnake2Camel()
     {
         $this->assertEquals("PascalCase", str("pascal_case")->snakeToCamel());
@@ -80,6 +95,9 @@ class FluentStringTest extends TestCase
         $this->assertEquals("camelCase", str("camel_case")->snakeToCamel(false));
     }
 
+    /**
+     * @return void
+     */
     public function testClean()
     {
         $cases = [
@@ -99,8 +117,12 @@ class FluentStringTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testToAddressArray()
     {
+//        setlocale(LC_ALL, "sl_SI.UTF-8");
         $cases = [
             'Pot v X 123b' => [
                 'Pot v X',
@@ -110,14 +132,52 @@ class FluentStringTest extends TestCase
                 'Pot v X',
                 '123/b',
             ],
-            // TODO Add more test cases: Omer bo poslal seznam caseou
+            'Aljaževa, 20 a' => [
+                'Aljaževa',
+                '20a'
+            ],
+            'Aškerčeva cesta, 22' => [
+                'Aškerčeva cesta',
+                '22'
+            ],
+            // TODO doesn't work - possible encoding detection error
+//            'B. Radić 88,' => [
+//                'B. Radić',
+//                '88'
+//            ],
+            'Bakovci, Cvetna ulica 24' => [
+                'Bakovci, Cvetna ulica',
+                '24'
+            ],
+            'Cesta 15.aprila 35' => [
+                'Cesta 15.aprila',
+                '35'
+            ],
+            'Cesta 20. Julija 13' => [
+                'Cesta 20. Julija',
+                '13'
+            ],
+            'Cesta II. Grupe Odredov 13c, 13c' => [
+                'Cesta II. Grupe Odredov',
+                '13c'
+            ],
+            'Delavska C.57,' => [
+                'Delavska C.',
+                '57'
+            ],
         ];
 
         foreach ($cases as $input => $expected) {
             $this->assertEquals($expected, str($input)->toAddressArray());
         }
+
+        $invalidAddress = "?+*/**, 15='+";
+        $this->assertEquals(null, str($invalidAddress)->toAddressArray());
     }
 
+    /**
+     * @return void
+     */
     public function testParsePlaceholders()
     {
         $subject = 'Hello, {name} from {place}!';
@@ -128,6 +188,14 @@ class FluentStringTest extends TestCase
 
         $this->assertEquals('Hello, George from the Jungle!', str($subject)->parsePlaceholders($placeholders));
 
-        // TODO Test case with different encoding
+        // TODO check below test which doesn't work
+//        $placeholders = [
+//            'name' => mb_convert_encoding('sime', 'ISO-8859-2', "UTF-8"),
+//            'place' => 'the Jungle',
+//        ];
+//
+//        $this->assertEquals('Hello, sime from the Jungle!', (string)str($subject)->parsePlaceholders($placeholders));
+//
+//        $this->assertEquals('UTF-8', mb_detect_encoding((string)str($subject)->parsePlaceholders($placeholders)));
     }
 }
