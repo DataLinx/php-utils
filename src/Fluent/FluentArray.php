@@ -62,6 +62,7 @@ class FluentArray
      * @param array $array Source array
      * @param array $target Target array
      * @return array
+     * @noinspection PhpMissingParamTypeInspection
      */
     private static function flattenRecursive($array, array &$target = []): ?array
     {
@@ -74,5 +75,10 @@ class FluentArray
         }
 
         return $target;
+    }
+
+    public function __toString()
+    {
+        return print_r($this->getArray(), true);
     }
 }
