@@ -245,4 +245,85 @@ class FluentString
 
         return $this;
     }
+
+    /**
+     * Truncate string to a certain length.
+     * Copied from Smarty modifiers:
+     * https://github.com/smarty-php/smarty/blob/support/3.1/libs/plugins/modifier.truncate.php
+     *
+     * @param int $length Length of truncated text
+     * @param string|null $etc String to put on the end (defaults to ...)
+     * @param bool $break_words Truncate at word boundary
+     * @param bool $middle Truncate in the middle of text
+     * @return $this
+     */
+    public function truncate(int $length = 80, ?string $etc = null, bool $break_words = false, bool $middle = false): self
+    {
+        if ($length == 0) {
+            return $this;
+        }
+
+        if ($etc === null) {
+            $etc = '...';
+        }
+
+        if (mb_strlen($this->value) > $length) {
+            $length -= min($length, mb_strlen($etc));
+
+            if (!$break_words && !$middle) {
+                $this->value = preg_replace('/\s+?(\S+)?$/', '', mb_substr($this->value, 0, $length + 1));
+            }
+
+            if (!$middle) {
+                $this->value = mb_substr($this->value, 0, $length) . $etc;
+            } else {
+                $this->value = mb_substr($this->value, 0, $length / 2) . $etc . mb_substr($this->value, - $length / 2, $length);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Make a string appropriate for an HTML meta description.
+     * Strips tags, decodes any HTML entities, trims, replaces multiple spaces and shortens it to 155 chars.
+     *
+     * @return $this
+     */
+    public function prepMetaDescription($string): self
+    {
+        $this->value = html_entity_decode(strip_tags($string), ENT_COMPAT, 'UTF-8');
+
+        $this->clean()
+             ->truncate(155);
+
+        $this->value = htmlspecialchars($this->value);
+
+        return $this;
+    }
+
+    /**
+     * Extract the YouTube video hash ID from a link. Supports multiple link formats.
+     *
+     * @return string|null
+     */
+    public function extractYouTubeHash(): ?string
+    {
+        // Format: https://www.youtube.com/watch?v=FQPbLJ__wdQ
+        $query = parse_url($this->value, PHP_URL_QUERY);
+        parse_str($query, $params);
+
+        if (isset($params['v'])) {
+            return $params['v'];
+        }
+
+        // Format: http://youtu.be/FQPbLJ__wdQ
+        $matches = [];
+
+        if (preg_match('/youtu.be\/(.*)/', $this->value, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
 }

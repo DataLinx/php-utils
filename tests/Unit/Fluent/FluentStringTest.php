@@ -241,4 +241,15 @@ class FluentStringTest extends TestCase
         $this->assertEquals('ISO-8859-2', mb_detect_encoding($str));
         $this->assertEquals(mb_convert_encoding('Živjo, Frančiška Žorž iz dišečega kraja Šared!', 'ISO-8859-2', 'UTF-8'), $str);
     }
+
+    public function testTruncate()
+    {
+        $this->assertEquals('This is a string...', str('This is a string that should be truncated after 20 characters.')->truncate(20));
+
+        // TODO Add more cases to test all parameters
+    }
+
+    // TODO Implement tests for prepMetaDescription
+
+    // TODO Implement tests for extractYouTubeHash
 }
