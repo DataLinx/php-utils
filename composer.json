@@ -1,6 +1,6 @@
 {
     "name": "datalinx/php-utils",
-    "description": "Collection of common helper functions",
+    "description": "Collection of common helper functions organized into fluent classes",
     "keywords": ["php", "helpers", "utilities"],
     "homepage": "https://github.com/datalinx/php-utils",
     "type": "library",
@@ -23,12 +23,13 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "^7.4",
+        "php": ">=7.4",
         "ext-mbstring": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "picqer/php-barcode-generator": "^2.2"
+        "picqer/php-barcode-generator": "^2.2",
+        "jaschilz/php-coverage-badger": "^2.0"
     },
     "suggest": {
         "picqer/php-barcode-generator": "Required to use FluentBarcode"
