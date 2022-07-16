@@ -122,7 +122,6 @@ class FluentStringTest extends TestCase
      */
     public function testToAddressArray()
     {
-//        setlocale(LC_ALL, "sl_SI.UTF-8");
         $cases = [
             'Pot v X 123b' => [
                 'Pot v X',
@@ -140,11 +139,10 @@ class FluentStringTest extends TestCase
                 'Aškerčeva cesta',
                 '22'
             ],
-            // TODO doesn't work - possible encoding detection error
-//            'B. Radić 88,' => [
-//                'B. Radić',
-//                '88'
-//            ],
+            'B. Radić 88,' => [
+                'B. Radić',
+                '88'
+            ],
             'Bakovci, Cvetna ulica 24' => [
                 'Bakovci, Cvetna ulica',
                 '24'
@@ -168,7 +166,9 @@ class FluentStringTest extends TestCase
         ];
 
         foreach ($cases as $input => $expected) {
-            $this->assertEquals($expected, str($input)->toAddressArray());
+            $address = str($input)->toAddressArray();
+            $this->assertIsArray($address, "Input address \"$input\" failed to parse to address array.");
+            $this->assertEquals($expected, $address);
         }
 
         $invalidAddress = "?+*/**, 15='+";

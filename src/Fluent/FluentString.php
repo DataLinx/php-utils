@@ -183,11 +183,11 @@ class FluentString
         // Sanitize the address - remove double spaces, trim trailing dots and commas
         $address = trim($this->clean(), '.,');
 
-        $street_name = '.+[.,a-z]+'; // Any string that ends with a dot, comma or letter
+        $street_name = '.+[.,\p{L}]+'; // Any string that ends with a dot, comma or letter
         $separator = '[ \/]*'; // Zero or more spaces or slashes
-        $house_number = '\d+[ \/]*[a-z]?'; // Starts with a digit, is optionally separated with a space or slash and has a single trailing letter
+        $house_number = '\d+[ \/]*\p{L}?'; // Starts with a digit, is optionally separated with a space or slash and has a single trailing letter
 
-        if (preg_match("/^($street_name)$separator($house_number)$/i", $address, $m)) {
+        if (preg_match("/^($street_name)$separator($house_number)$/iu", $address, $m)) {
 
             $m[1] = trim($m[1], ","); // Trim any commas trailing the "street name"
 
