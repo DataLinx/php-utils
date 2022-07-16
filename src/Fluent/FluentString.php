@@ -233,16 +233,16 @@ class FluentString
         $from = [];
         $to = [];
 
-        if (mb_detect_encoding($this->value) !== 'UTF-8') {
-            $this->value = mb_convert_encoding($this->value, 'UTF-8');
-        }
+        $subject_encoding = mb_detect_encoding($this->value);
 
         foreach ($placeholders as $key => $val) {
-            $from[] = '{'. (mb_detect_encoding($key) != 'UTF-8' ? mb_convert_encoding($key, 'UTF-8') : $key) .'}';
-            $to[] = mb_detect_encoding($val) != 'UTF-8' ? mb_convert_encoding($val, 'UTF-8') : $val;
+            $key_encoding = mb_detect_encoding($key);
+            $val_encoding = mb_detect_encoding($val);
+            $from[] = '{'. ($key_encoding != $subject_encoding ? mb_convert_encoding($key, $subject_encoding, $key_encoding) : $key) .'}';
+            $to[] = $val_encoding != $subject_encoding ? mb_convert_encoding($val, $subject_encoding, $val_encoding) : $val;
         }
 
-        $this->value = mb_convert_encoding(str_replace($from, $to, $this->value), 'UTF-8');
+        $this->value = str_replace($from, $to, $this->value);
 
         return $this;
     }

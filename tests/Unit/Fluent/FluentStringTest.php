@@ -180,6 +180,13 @@ class FluentStringTest extends TestCase
      */
     public function testParsePlaceholders()
     {
+        // Set encoding detection order - from widest to narrowest
+        // See this comment from 17 years ago: https://www.php.net/manual/en/function.mb-detect-encoding.php#51389
+        // This is needed because we use mb_detect_encoding() in the function implementation
+        mb_detect_order(['UTF-8', 'ISO-8859-2']);
+
+        // UTF-8 encoded strings
+        // -------------
         $subject = 'Hello, {name} from {place}!';
         $placeholders = [
             'name' => 'George',
@@ -188,14 +195,50 @@ class FluentStringTest extends TestCase
 
         $this->assertEquals('Hello, George from the Jungle!', str($subject)->parsePlaceholders($placeholders));
 
-        // TODO check below test which doesn't work
-//        $placeholders = [
-//            'name' => mb_convert_encoding('sime', 'ISO-8859-2', "UTF-8"),
-//            'place' => 'the Jungle',
-//        ];
-//
-//        $this->assertEquals('Hello, sime from the Jungle!', (string)str($subject)->parsePlaceholders($placeholders));
-//
-//        $this->assertEquals('UTF-8', mb_detect_encoding((string)str($subject)->parsePlaceholders($placeholders)));
+        // UTF-8 strings with caron characters
+        // -------------
+        $placeholders = [
+            'name' => 'Frančiška Žorž',
+            'place' => 'Šared',
+        ];
+
+        $this->assertEquals("Hello, Frančiška Žorž from Šared!", (string)str($subject)->parsePlaceholders($placeholders));
+
+        // Mixed encodings — UTF-8 subject and ISO-8859-2 placeholder values
+        // -------------
+        $subject = 'Živjo, {name} iz dišečega kraja {place} s {amount} € ✅!';
+        $this->assertEquals('UTF-8', mb_detect_encoding($subject));
+
+        $placeholders = [
+            'name' => mb_convert_encoding('Frančiška Žorž', 'ISO-8859-2', 'UTF-8'),
+            'place' => mb_convert_encoding('Šared', 'ISO-8859-2', 'UTF-8'),
+            'amount' => 100,
+        ];
+
+        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['name']));
+        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['place']));
+
+        $str = (string)str($subject)->parsePlaceholders($placeholders);
+
+        $this->assertEquals('UTF-8', mb_detect_encoding($str));
+        $this->assertEquals('Živjo, Frančiška Žorž iz dišečega kraja Šared s 100 € ✅!', $str);
+
+        // All ISO-8859-2 strings
+        // -------------
+        $subject = mb_convert_encoding('Živjo, {name} iz dišečega kraja {place}!', 'ISO-8859-2', 'UTF-8');
+        $this->assertEquals('ISO-8859-2', mb_detect_encoding($subject));
+
+        $placeholders = [
+            'name' => mb_convert_encoding('Frančiška Žorž', 'ISO-8859-2', 'UTF-8'),
+            'place' => mb_convert_encoding('Šared', 'ISO-8859-2', 'UTF-8'),
+        ];
+
+        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['name']));
+        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['place']));
+
+        $str = (string)str($subject)->parsePlaceholders($placeholders);
+
+        $this->assertEquals('ISO-8859-2', mb_detect_encoding($str));
+        $this->assertEquals(mb_convert_encoding('Živjo, Frančiška Žorž iz dišečega kraja Šared!', 'ISO-8859-2', 'UTF-8'), $str);
     }
 }
