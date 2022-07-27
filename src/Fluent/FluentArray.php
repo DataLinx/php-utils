@@ -130,4 +130,74 @@ class FluentArray
 
         return $this;
     }
+
+    /**
+     * Get sequential position of the value in the array, if it exists. The first element is at the position of 1.
+     *
+     * @param mixed $value Value to find
+     * @param bool $strict Use strict comparison (type and value)
+     * @return int|null Position or null if not found
+     */
+    public function positionOf($value, bool $strict = true): ?int
+    {
+        $pos = 1;
+
+        foreach ($this->array as $element) {
+            if ($strict) {
+                if ($element === $value) {
+                    return $pos;
+                }
+            } elseif ($element == $value) {
+                return $pos;
+            }
+            $pos++;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get sequential position of the key in the array, if it exists. The first element is at the position of 1.
+     *
+     * @param string|int $key Key to find
+     * @param bool $strict Use strict comparison (type and value)
+     * @return int|null Position or null if not found
+     */
+    public function positionOfKey($key, bool $strict = true): ?int
+    {
+        $pos = 1;
+
+        foreach (array_keys($this->array) as $e_key) {
+            if ($strict) {
+                if ($e_key === $key) {
+                    return $pos;
+                }
+            } elseif ($e_key == $key) {
+                return $pos;
+            }
+            $pos++;
+        }
+
+        return null;
+    }
+
+    /**
+     * Remove element by value. Removes all occurrences of the value in the array.
+     *
+     * @param mixed $value Value(s) to remove (primitive type or array)
+     * @param bool $strict Use strict comparison (type and value)
+     * @return $this
+     */
+    public function remove($value, bool $strict = true): self
+    {
+        $this->array = array_filter($this->array, function ($element) use ($value, $strict) {
+            if (is_array($value)) {
+                return ! in_array($element, $value, $strict);
+            } else {
+                return $strict ? ($element !== $value) : ($element != $value);
+            }
+        });
+
+        return $this;
+    }
 }

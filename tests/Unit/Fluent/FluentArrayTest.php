@@ -134,4 +134,58 @@ class FluentArrayTest extends TestCase
 
         $this->assertEquals($expected, $source->insertBefore("banana", "avocado", "four")->getArray());
     }
+
+    public function testPositionOf()
+    {
+        $arr = arr(["one", "two", "three", 4]);
+
+        $this->assertEquals(2, $arr->positionOf("two"));
+        $this->assertEquals(4, $arr->positionOf(4));
+        $this->assertNull($arr->positionOf('4'));
+        $this->assertEquals(4, $arr->positionOf('4', false));
+        $this->assertNull($arr->positionOf("four"));
+    }
+
+    public function testPositionOfKey()
+    {
+        $arr = arr([
+            "one" => "apple",
+            "two" => "banana",
+            "three" => "orange",
+            4 => "avocado",
+        ]);
+
+        $this->assertEquals(2, $arr->positionOfKey("two"));
+        $this->assertEquals(4, $arr->positionOfKey(4));
+        $this->assertNull($arr->positionOfKey('4'));
+        $this->assertEquals(4, $arr->positionOfKey('4', false));
+        $this->assertNull($arr->positionOfKey("four"));
+    }
+
+    public function testRemove()
+    {
+        $source = arr([
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ]);
+        $expected = [
+            "one" => "apple",
+            "four" => "orange",
+        ];
+
+        $this->assertEquals($expected, $source->remove("banana")->getArray());
+
+        // Test multiple removals
+        $source = arr([
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ]);
+        $expected = [
+            "one" => "apple",
+        ];
+
+        $this->assertEquals($expected, $source->remove(["banana", "orange"])->getArray());
+    }
 }
