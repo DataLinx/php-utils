@@ -51,4 +51,87 @@ class FluentArrayTest extends TestCase
             $this->assertEquals($case["expected"], arr($case["input"])->flatten($case["targetArray"])->getArray());
         }
     }
+
+    public function testInsertBefore()
+    {
+        // Test integers
+        // -------------------------------------
+        $source = arr([1, 3, 4]);
+        $expected = [1, 2, 3, 4];
+
+        $this->assertEquals($expected, $source->insertBefore(3, 2)->getArray());
+
+        // Test strings
+        // -------------------------------------
+        $source = arr(["one", "three", "four"]);
+        $expected = ["one", "two", "three", "four"];
+
+        $this->assertEquals($expected, $source->insertBefore("three", "two")->getArray());
+
+        // Test duplicate values
+        // -------------------------------------
+        $source = arr([1, 3, 4, 5, 3, 6]);
+        $expected = [1, 2, 3, 4, 5, 3, 6];
+
+        $this->assertEquals($expected, $source->insertBefore(3, 2)->getArray());
+
+        // Test weak comparison
+        // -------------------------------------
+        $source = arr([1, 3, 4]);
+        $expected = [1, 3, 4];
+
+        $this->assertEquals($expected, $source->insertBefore('3', 2)->getArray());
+
+        $source = arr([1, 3, 4]);
+        $expected = [1, 2, 3, 4];
+
+        $this->assertEquals($expected, $source->insertBefore('3', 2, null, false)->getArray());
+
+        // Test associative array
+        // -------------------------------------
+        $source = arr([
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ]);
+        $expected = [
+            "one" => "apple",
+            "avocado",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+
+        $this->assertEquals($expected, $source->insertBefore("banana", "avocado")->getArray());
+
+        // Test insertion with specific key
+        // -------------------------------------
+        $source = arr([
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ]);
+        $expected = [
+            "one" => "apple",
+            "two" => "avocado",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+
+        $this->assertEquals($expected, $source->insertBefore("banana", "avocado", "two")->getArray());
+
+        // Test insertion with specific key that already exists
+        // -------------------------------------
+        $source = arr([
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ]);
+        $expected = [
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+
+        $this->assertEquals($expected, $source->insertBefore("banana", "avocado", "four")->getArray());
+    }
 }

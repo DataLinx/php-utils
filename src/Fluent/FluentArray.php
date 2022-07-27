@@ -81,4 +81,53 @@ class FluentArray
     {
         return print_r($this->getArray(), true);
     }
+
+    /**
+     * Insert value before the specified value
+     *
+     * @param mixed $before
+     * @param mixed $value
+     * @param string|null $key Optional key, when using assoc. array
+     * @param bool $strict Use strict comparison (same type and value)
+     * @return $this
+     */
+    public function insertBefore($before, $value, $key = null, bool $strict = true): self
+    {
+        $new = [];
+        $should_insert = null;
+
+        foreach ($this->array as $k => $v) {
+            // If we haven't inserted the element yet....
+            if ($should_insert === null) {
+                // ... compare the values
+                if ($strict) {
+                    if ($v === $before) {
+                        $should_insert = true;
+                    }
+                } elseif ($v == $before) {
+                    $should_insert = true;
+                }
+            }
+
+            if ($should_insert) {
+                if ($key) {
+                    $new[$key] = $value;
+                } else {
+                    $new[] = $value;
+                }
+
+                $should_insert = false; // Block further comparisons and insertions
+            }
+
+            if (is_string($k)) {
+                $new[$k] = $v;
+            } else {
+                $new[] = $v;
+            }
+        }
+
+        $this->array = $new;
+
+        return $this;
+    }
 }
