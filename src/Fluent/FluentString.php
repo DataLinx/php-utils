@@ -16,6 +16,9 @@ class FluentString
         $this->value = $value;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->value;
@@ -48,16 +51,16 @@ class FluentString
     public function htmlToPlain(string $newline = PHP_EOL): self
     {
         // Remove all existing newlines, since they have no role in HTML
-        $html = preg_replace('/\R/', '', $this->value);
+        $html = preg_replace("/\R/", "", $this->value);
 
         // Replace breaks and paragraphs with newlines
         $html = str_replace([
-            '<br>',
-            '<br/>',
-            '<br />',
-            '</p><p>',
-            '<p>',
-            '</p>',
+            "<br>",
+            "<br/>",
+            "<br />",
+            "</p><p>",
+            "<p>",
+            "</p>",
         ], [
             $newline,
             $newline,
@@ -92,11 +95,11 @@ class FluentString
      * @param string $class HTML class for the anchor element
      * @return $this
      */
-    public function linkHashtags(string $hrefTpl, string $class = 'hashtag'): self
+    public function linkHashtags(string $hrefTpl, string $class = "hashtag"): self
     {
         $m = [];
 
-        if (preg_match_all('/#([a-z0-9]+)/i', $this->value, $m)) {
+        if (preg_match_all("/#([a-z0-9]+)/i", $this->value, $m)) {
             foreach ($m[1] as $tag) {
                 $this->value = preg_replace("/#$tag/", '<a class="'. $class .'" href="'. str_replace('{tag}', $tag, $hrefTpl) . $tag . '" data-tag="'. $tag .'">#'. $tag .'</a>', $this->value);
             }
@@ -113,7 +116,7 @@ class FluentString
     public function camelToSnake(): self
     {
         $this->value = preg_replace_callback(
-            '#(^|[a-z])([A-Z])#',
+            "#(^|[a-z])([A-Z])#",
             function (array $matches) {
                 if (0 === strlen($matches[1])) {
                     $result = $matches[2];
@@ -136,7 +139,7 @@ class FluentString
      */
     public function snakeToCamel(bool $upper = true): self
     {
-        $this->value = str_replace('_', '', ucwords($this->value, '_'));
+        $this->value = str_replace("_", "", ucwords($this->value, "_"));
 
         if (! $upper) {
             $this->value = lcfirst($this->value);
@@ -155,7 +158,7 @@ class FluentString
     public function clean(): self
     {
         if (! empty($this->value)) {
-            $this->value = preg_replace('/\s{2,}/', ' ', trim($this->value));
+            $this->value = preg_replace("/\s{2,}/", " ", trim($this->value));
         }
 
         return $this;
@@ -167,8 +170,8 @@ class FluentString
      * E.g. <b>Pot v X 123b</b> will return:
      * <pre>
      * [
-     * 		0 => 'Pot v X',
-     *		1 => '123b',
+     * 		0 => "Pot v X",
+     *		1 => "123b",
      * ]
      * </pre>
      *
@@ -181,11 +184,11 @@ class FluentString
         $m = [];
 
         // Sanitize the address - remove double spaces, trim trailing dots and commas
-        $address = trim($this->clean(), '.,');
+        $address = trim($this->clean(), ".,");
 
-        $street_name = '.+[.,\p{L}]+'; // Any string that ends with a dot, comma or letter
-        $separator = '[ \/]*'; // Zero or more spaces or slashes
-        $house_number = '\d+[ \/]*\p{L}?'; // Starts with a digit, is optionally separated with a space or slash and has a single trailing letter
+        $street_name = ".+[.,\p{L}]+"; // Any string that ends with a dot, comma or letter
+        $separator = "[ \/]*"; // Zero or more spaces or slashes
+        $house_number = "\d+[ \/]*\p{L}?"; // Starts with a digit, is optionally separated with a space or slash and has a single trailing letter
 
         if (preg_match("/^($street_name)$separator($house_number)$/iu", $address, $m)) {
             $m[1] = trim($m[1], ","); // Trim any commas trailing the "street name"
@@ -197,7 +200,7 @@ class FluentString
 
             return [
                 $m[1],
-                str_replace(' ', '', $m[2]), // Remove all spaces in the house number
+                str_replace(" ", "", $m[2]), // Remove all spaces in the house number
             ];
         }
 
@@ -215,7 +218,7 @@ class FluentString
      * Provide the array as:
      * <code>
      *  array(
-     *      'some_placeholder' => 'some final value'
+     *      "some_placeholder" => "some final value"
      *  )
      * </code>
      *
@@ -237,7 +240,7 @@ class FluentString
         foreach ($placeholders as $key => $val) {
             $key_encoding = mb_detect_encoding($key);
             $val_encoding = mb_detect_encoding($val);
-            $from[] = '{'. ($key_encoding != $subject_encoding ? mb_convert_encoding($key, $subject_encoding, $key_encoding) : $key) .'}';
+            $from[] = "{". ($key_encoding != $subject_encoding ? mb_convert_encoding($key, $subject_encoding, $key_encoding) : $key) ."}";
             $to[] = $val_encoding != $subject_encoding ? mb_convert_encoding($val, $subject_encoding, $val_encoding) : $val;
         }
 
@@ -264,20 +267,21 @@ class FluentString
         }
 
         if ($etc === null) {
-            $etc = '...';
+            $etc = "...";
         }
 
         if (mb_strlen($this->value) > $length) {
             $length -= min($length, mb_strlen($etc));
 
             if (!$break_words && !$middle) {
-                $this->value = preg_replace('/\s+?(\S+)?$/', '', mb_substr($this->value, 0, $length + 1));
+                $this->value = preg_replace("/\s+?(\S+)?$/", "", mb_substr($this->value, 0, $length + 1));
             }
 
+            $endings = ".,!?-;:(\" ";
             if (!$middle) {
-                $this->value = mb_substr($this->value, 0, $length) . $etc;
+                $this->value = trim(mb_substr($this->value, 0, $length), $endings) . $etc;
             } else {
-                $this->value = mb_substr($this->value, 0, $length / 2) . $etc . mb_substr($this->value, - $length / 2, $length);
+                $this->value = trim(mb_substr($this->value, 0, $length / 2), $endings) . $etc . ltrim(mb_substr($this->value, - $length / 2, $length), $endings);
             }
         }
 
@@ -286,16 +290,17 @@ class FluentString
 
     /**
      * Make a string appropriate for an HTML meta description.
-     * Strips tags, decodes any HTML entities, trims, replaces multiple spaces and shortens it to 155 chars.
+     * Strip tags, decodes any HTML entities, trims, replaces multiple spaces and shortens it to 155 chars.
      *
+     * @param int $length
      * @return $this
      */
-    public function prepMetaDescription($string): self
+    public function prepMetaDescription(int $length = 155): self
     {
-        $this->value = html_entity_decode(strip_tags($string), ENT_COMPAT, 'UTF-8');
+        $this->value = html_entity_decode(strip_tags($this->value), ENT_COMPAT, "UTF-8");
 
         $this->clean()
-             ->truncate(155);
+             ->truncate($length);
 
         $this->value = htmlspecialchars($this->value);
 
@@ -313,14 +318,14 @@ class FluentString
         $query = parse_url($this->value, PHP_URL_QUERY);
         parse_str($query, $params);
 
-        if (isset($params['v'])) {
-            return $params['v'];
+        if (isset($params["v"])) {
+            return $params["v"];
         }
 
         // Format: http://youtu.be/FQPbLJ__wdQ
         $matches = [];
 
-        if (preg_match('/youtu.be\/(.*)/', $this->value, $matches)) {
+        if (preg_match("/youtu.be\/(.*)/", $this->value, $matches)) {
             return $matches[1];
         }
 

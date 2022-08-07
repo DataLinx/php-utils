@@ -6,7 +6,7 @@ namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
 use PHPUnit\Framework\TestCase;
 
-require_once './src/fluent_helpers.php';
+require_once "./src/fluent_helpers.php";
 
 class FluentStringTest extends TestCase
 {
@@ -123,45 +123,45 @@ class FluentStringTest extends TestCase
     public function testToAddressArray()
     {
         $cases = [
-            'Pot v X 123b' => [
-                'Pot v X',
-                '123b',
+            "Pot v X 123b" => [
+                "Pot v X",
+                "123b",
             ],
-            'Pot  v   X 123/b ' => [
-                'Pot v X',
-                '123/b',
+            "Pot  v   X 123/b " => [
+                "Pot v X",
+                "123/b",
             ],
-            'Aljaževa, 20 a' => [
-                'Aljaževa',
-                '20a'
+            "Aljaževa, 20 a" => [
+                "Aljaževa",
+                "20a"
             ],
-            'Aškerčeva cesta, 22' => [
-                'Aškerčeva cesta',
-                '22'
+            "Aškerčeva cesta, 22" => [
+                "Aškerčeva cesta",
+                "22"
             ],
-            'B. Radić 88,' => [
-                'B. Radić',
-                '88'
+            "B. Radić 88," => [
+                "B. Radić",
+                "88"
             ],
-            'Bakovci, Cvetna ulica 24' => [
-                'Bakovci, Cvetna ulica',
-                '24'
+            "Bakovci, Cvetna ulica 24" => [
+                "Bakovci, Cvetna ulica",
+                "24"
             ],
-            'Cesta 15.aprila 35' => [
-                'Cesta 15.aprila',
-                '35'
+            "Cesta 15.aprila 35" => [
+                "Cesta 15.aprila",
+                "35"
             ],
-            'Cesta 20. Julija 13' => [
-                'Cesta 20. Julija',
-                '13'
+            "Cesta 20. Julija 13" => [
+                "Cesta 20. Julija",
+                "13"
             ],
-            'Cesta II. Grupe Odredov 13c, 13c' => [
-                'Cesta II. Grupe Odredov',
-                '13c'
+            "Cesta II. Grupe Odredov 13c, 13c" => [
+                "Cesta II. Grupe Odredov",
+                "13c"
             ],
-            'Delavska C.57,' => [
-                'Delavska C.',
-                '57'
+            "Delavska C.57," => [
+                "Delavska C.",
+                "57"
             ],
         ];
 
@@ -183,73 +183,128 @@ class FluentStringTest extends TestCase
         // Set encoding detection order - from widest to narrowest
         // See this comment from 17 years ago: https://www.php.net/manual/en/function.mb-detect-encoding.php#51389
         // This is needed because we use mb_detect_encoding() in the function implementation
-        mb_detect_order(['UTF-8', 'ISO-8859-2']);
+        mb_detect_order(["UTF-8", "ISO-8859-2"]);
 
         // UTF-8 encoded strings
         // -------------
-        $subject = 'Hello, {name} from {place}!';
+        $subject = "Hello, {name} from {place}!";
         $placeholders = [
-            'name' => 'George',
-            'place' => 'the Jungle',
+            "name" => "George",
+            "place" => "the Jungle",
         ];
 
-        $this->assertEquals('Hello, George from the Jungle!', str($subject)->parsePlaceholders($placeholders));
+        $this->assertEquals("Hello, George from the Jungle!", str($subject)->parsePlaceholders($placeholders));
 
         // UTF-8 strings with caron characters
         // -------------
         $placeholders = [
-            'name' => 'Frančiška Žorž',
-            'place' => 'Šared',
+            "name" => "Frančiška Žorž",
+            "place" => "Šared",
         ];
 
         $this->assertEquals("Hello, Frančiška Žorž from Šared!", (string)str($subject)->parsePlaceholders($placeholders));
 
         // Mixed encodings — UTF-8 subject and ISO-8859-2 placeholder values
         // -------------
-        $subject = 'Živjo, {name} iz dišečega kraja {place} s {amount} € ✅!';
-        $this->assertEquals('UTF-8', mb_detect_encoding($subject));
+        $subject = "Živjo, {name} iz dišečega kraja {place} s {amount} € ✅!";
+        $this->assertEquals("UTF-8", mb_detect_encoding($subject));
 
         $placeholders = [
-            'name' => mb_convert_encoding('Frančiška Žorž', 'ISO-8859-2', 'UTF-8'),
-            'place' => mb_convert_encoding('Šared', 'ISO-8859-2', 'UTF-8'),
-            'amount' => 100,
+            "name" => mb_convert_encoding("Frančiška Žorž", "ISO-8859-2", "UTF-8"),
+            "place" => mb_convert_encoding("Šared", "ISO-8859-2", "UTF-8"),
+            "amount" => 100,
         ];
 
-        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['name']));
-        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['place']));
+        $this->assertEquals("ISO-8859-2", mb_detect_encoding($placeholders["name"]));
+        $this->assertEquals("ISO-8859-2", mb_detect_encoding($placeholders["place"]));
 
         $str = (string)str($subject)->parsePlaceholders($placeholders);
 
-        $this->assertEquals('UTF-8', mb_detect_encoding($str));
-        $this->assertEquals('Živjo, Frančiška Žorž iz dišečega kraja Šared s 100 € ✅!', $str);
+        $this->assertEquals("UTF-8", mb_detect_encoding($str));
+        $this->assertEquals("Živjo, Frančiška Žorž iz dišečega kraja Šared s 100 € ✅!", $str);
 
         // All ISO-8859-2 strings
         // -------------
-        $subject = mb_convert_encoding('Živjo, {name} iz dišečega kraja {place}!', 'ISO-8859-2', 'UTF-8');
-        $this->assertEquals('ISO-8859-2', mb_detect_encoding($subject));
+        $subject = mb_convert_encoding("Živjo, {name} iz dišečega kraja {place}!", "ISO-8859-2", "UTF-8");
+        $this->assertEquals("ISO-8859-2", mb_detect_encoding($subject));
 
         $placeholders = [
-            'name' => mb_convert_encoding('Frančiška Žorž', 'ISO-8859-2', 'UTF-8'),
-            'place' => mb_convert_encoding('Šared', 'ISO-8859-2', 'UTF-8'),
+            "name" => mb_convert_encoding("Frančiška Žorž", "ISO-8859-2", "UTF-8"),
+            "place" => mb_convert_encoding("Šared", "ISO-8859-2", "UTF-8"),
         ];
 
-        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['name']));
-        $this->assertEquals('ISO-8859-2', mb_detect_encoding($placeholders['place']));
+        $this->assertEquals("ISO-8859-2", mb_detect_encoding($placeholders["name"]));
+        $this->assertEquals("ISO-8859-2", mb_detect_encoding($placeholders["place"]));
 
         $str = (string)str($subject)->parsePlaceholders($placeholders);
 
-        $this->assertEquals('ISO-8859-2', mb_detect_encoding($str));
-        $this->assertEquals(mb_convert_encoding('Živjo, Frančiška Žorž iz dišečega kraja Šared!', 'ISO-8859-2', 'UTF-8'), $str);
+        $this->assertEquals("ISO-8859-2", mb_detect_encoding($str));
+        $this->assertEquals(mb_convert_encoding("Živjo, Frančiška Žorž iz dišečega kraja Šared!", "ISO-8859-2", "UTF-8"), $str);
     }
 
+    /**
+     * @return void
+     */
     public function testTruncate()
     {
-        $this->assertEquals('This is a string...', str('This is a string that should be truncated after 20 characters.')->truncate(20));
+        $this->assertEquals(
+            "This is a happy...",
+            str("This is a happy, string.")->truncate(20, null, true)
+        );
 
-        // TODO Add more cases to test all parameters
+        $this->assertEquals(
+            "This is a happy...",
+            str("This is a happy, string.")->truncate(19)
+        );
+
+        $this->assertEquals(
+            "This is a happy string.",
+            str("This is a happy string.")->truncate(0)
+        );
+
+        $this->assertEquals(
+            "This is a string...",
+            str("This is a string that should be truncated after 20 characters.")->truncate(20)
+        );
+
+        $this->assertEquals(
+            "This is a list with apples, strawberries, bananas etc.",
+            str("This is a list with apples, strawberries, bananas and lemons.")->truncate(55, " etc.")
+        );
+
+        $this->assertEquals(
+            "This is a list with apples, strawberries, bananas...",
+            str("This is a list with apples, strawberries, bananas and lemons.")->truncate(52, null, true)
+        );
+
+        $this->assertEquals(
+            "This is a tex...n the middle.",
+            str("This is a text truncated in the middle.")->truncate(30, null, false, true)
+        );
     }
 
-    // TODO Implement tests for prepMetaDescription
+    /**
+     * @return void
+     */
+    public function testPrepMetaDescription()
+    {
+        $this->assertEquals("This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description...", str("This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote.")->prepMetaDescription());
+        $this->assertEquals("This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description...", str("<p>This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote.</p>")->prepMetaDescription());
+        $this->assertEquals("This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description...", str("<h1>This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote.</h1>")->prepMetaDescription());
+        $this->assertEquals("This is a very nice meta description that we just...", str("This is a very nice meta description that we just wrote.")->prepMetaDescription(52));
+        $this->assertEquals("This &lt; &gt; is a very nice meta description symbol...", str("This < > is a very nice meta description symbol we have here.")->prepMetaDescription(52));
+    }
 
-    // TODO Implement tests for extractYouTubeHash
+    /**
+     * @return void
+     */
+    public function testExtractYouTubeHash()
+    {
+        $this->assertEquals("FQPbLJ__wdQ", str("https://www.youtube.com/watch?v=FQPbLJ__wdQ")->extractYouTubeHash());
+        $this->assertEquals("FQPbLJ__wdQ", str("http://www.youtube.com/watch?v=FQPbLJ__wdQ")->extractYouTubeHash());
+        $this->assertEquals("FQPbLJ__wdQ", str("www.youtube.com/watch?v=FQPbLJ__wdQ")->extractYouTubeHash());
+        $this->assertEquals("FQPbLJ__wdQ", str("http://youtu.be/FQPbLJ__wdQ")->extractYouTubeHash());
+        $this->assertEquals("FQPbLJ__wdQ", str("https://youtu.be/FQPbLJ__wdQ")->extractYouTubeHash());
+        $this->assertNull(str("https://you.be/FQPbLJ__wdQ")->extractYouTubeHash());
+    }
 }

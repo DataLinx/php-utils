@@ -19,6 +19,9 @@ class FluentNumber
         $this->value = $value;
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return (string)$this->value;
@@ -53,23 +56,23 @@ class FluentNumber
     {
         // Make sure that we only use the integer portion of the value
         $n = (int)$this->value;
-        $result = '';
+        $result = "";
 
         // Declare a lookup array that we will use to traverse the number:
         static $lookup = [
-            'M'		=> 1000,
-            'CM'	=> 900,
-            'D'		=> 500,
-            'CD'	=> 400,
-            'C'		=> 100,
-            'XC'	=> 90,
-            'L'		=> 50,
-            'XL'	=> 40,
-            'X'		=> 10,
-            'IX'	=> 9,
-            'V'		=> 5,
-            'IV'	=> 4,
-            'I'		=> 1,
+            "M"		=> 1000,
+            "CM"	=> 900,
+            "D"		=> 500,
+            "CD"	=> 400,
+            "C"		=> 100,
+            "XC"	=> 90,
+            "L"		=> 50,
+            "XL"	=> 40,
+            "X"		=> 10,
+            "IX"	=> 9,
+            "V"		=> 5,
+            "IV"	=> 4,
+            "I"		=> 1,
         ];
 
         foreach ($lookup as $roman => $value) {

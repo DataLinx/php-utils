@@ -20,10 +20,10 @@ use Picqer\Barcode\BarcodeGeneratorSVG;
 class FluentBarcode
 {
     /* File formats */
-    public const FORMAT_SVG = 'svg';
-    public const FORMAT_PNG = 'png';
-    public const FORMAT_JPG = 'jpg';
-    public const FORMAT_HTML = 'html';
+    public const FORMAT_SVG = "svg";
+    public const FORMAT_PNG = "png";
+    public const FORMAT_JPG = "jpg";
+    public const FORMAT_HTML = "html";
 
     /**
      * @var string Code to display
@@ -69,8 +69,8 @@ class FluentBarcode
      */
     public function __construct(string $code, string $type = null)
     {
-        if (! class_exists('Picqer\Barcode\Barcode')) {
-            throw new Exception('You need to install the picqer/php-barcode-generator package to use the FluentBarcode utility!');
+        if (! class_exists("Picqer\Barcode\Barcode")) {
+            throw new Exception("You need to install the picqer/php-barcode-generator package to use the FluentBarcode utility!");
         }
 
         $this->code = $code;
@@ -80,6 +80,10 @@ class FluentBarcode
         }
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function __toString()
     {
         return $this->embed();
@@ -168,9 +172,14 @@ class FluentBarcode
     /**
      * @param array|string $color
      * @return FluentBarcode
+     * @throws Exception
      */
     public function setColor($color): FluentBarcode
     {
+        if ($color) {
+            $this->validateColor($color);
+        }
+
         $this->color = $color;
         return $this;
     }
@@ -186,10 +195,16 @@ class FluentBarcode
     /**
      * @param string $format
      * @return FluentBarcode
+     * @throws Exception
      */
     public function setFormat(string $format): FluentBarcode
     {
+        if ($this->color) {
+            $this->validateColor($this->color, $format);
+        }
+
         $this->format = $format;
+
         return $this;
     }
 
@@ -205,14 +220,14 @@ class FluentBarcode
     public function embed(?string $format = null): string
     {
         switch ($format ?: $this->format) {
-            case 'svg':
-                $embed = 'data:image/svg+xml;base64,';
+            case "svg":
+                $embed = "data:image/svg+xml;base64,";
                 break;
-            case 'png':
-                $embed = 'data:image/png;base64,';
+            case "png":
+                $embed = "data:image/png;base64,";
                 break;
-            case 'jpg':
-                $embed = 'data:image/jpg;base64,';
+            case "jpg":
+                $embed = "data:image/jpg;base64,";
                 break;
             default:
                 // For HTML, simply return the contents
@@ -240,10 +255,10 @@ class FluentBarcode
                 case self::FORMAT_PNG:
                 case self::FORMAT_JPG:
                 case self::FORMAT_HTML:
-                    $this->format = $extension;
+                    $this->setFormat($extension);
             }
         } else {
-            $filename = tempnam(sys_get_temp_dir(), $this->code) . '.' . $this->format;
+            $filename = tempnam(sys_get_temp_dir(), $this->code) . "." . $this->format;
         }
 
         file_put_contents($filename, $this->getContents());
@@ -254,6 +269,7 @@ class FluentBarcode
     /**
      * Get generated barcode contents, as provided by the underlying library
      *
+     * @return string
      * @throws Exception
      */
     private function getContents(): string
@@ -264,7 +280,7 @@ class FluentBarcode
             switch ($this->format) {
                 case self::FORMAT_HTML:
                 case self::FORMAT_SVG:
-                    $color = 'black';
+                    $color = "black";
                     break;
 
                 default:
@@ -286,7 +302,7 @@ class FluentBarcode
     private function getGenerator()
     {
         if (empty($this->format)) {
-            throw new Exception('Barcode format is required');
+            throw new Exception("Barcode format is required");
         }
 
         if (!isset(self::$generators[$this->format])) {
@@ -295,9 +311,9 @@ class FluentBarcode
                 case self::FORMAT_PNG:
                 case self::FORMAT_JPG:
                 case self::FORMAT_HTML:
-                    $class = '\Picqer\Barcode\BarcodeGenerator' . strtoupper($this->format);
+                    $class = "\Picqer\Barcode\BarcodeGenerator" . strtoupper($this->format);
                     self::$generators[$this->format] = new $class();
-                    if ($this->format === self::FORMAT_JPG && function_exists('imagecreate')) {
+                    if ($this->format === self::FORMAT_JPG && function_exists("imagecreate")) {
                         // For JPG, always use GD if available, since with imagick it only shows a completely black block
                         self::$generators[$this->format]->useGd();
                     }
@@ -308,5 +324,39 @@ class FluentBarcode
         }
 
         return self::$generators[$this->format];
+    }
+
+    /**
+     * Validate if the given color is in a correct format (hex or RGB array) regarding the chosen file format (svg, html, png and jpg).
+     *
+     * @param string|array $color
+     * @param string|null $format
+     * @return void
+     * @throws Exception
+     */
+    public function validateColor($color, ?string $format = null): void
+    {
+        switch ($format ?? $this->format) {
+            case self::FORMAT_HTML:
+            case self::FORMAT_SVG:
+                if (!is_string($color)) {
+                    throw new Exception("The selected format requires a hex code or color name.");
+                }
+                break;
+
+            default:
+                // For PNG and JPG, we need an RGB format
+                $colorFormatErrMsg = "When using the PNG or JPG format the color must be in a valid RGB format (example: [55, 85, 155])";
+                if (is_array($color)) {
+                    if (! count($color) == 3 and min($color) >= 0 and max($color) <= 255) {
+                        throw new Exception($colorFormatErrMsg);
+                    }
+                } else {
+                    throw new Exception($colorFormatErrMsg);
+                }
+
+
+                break;
+        }
     }
 }

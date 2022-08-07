@@ -6,7 +6,7 @@ namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
 use PHPUnit\Framework\TestCase;
 
-require_once './src/fluent_helpers.php';
+require_once "./src/fluent_helpers.php";
 
 class FluentArrayTest extends TestCase
 {
@@ -22,6 +22,14 @@ class FluentArrayTest extends TestCase
         $numbers->setArray([4, 5, 6]);
 
         $this->assertEquals([4, 5, 6], $numbers->getArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testToString()
+    {
+        $this->assertEquals(print_r([1,2,3], true), (string)arr([1,2,3]));
     }
 
     /**
@@ -52,6 +60,9 @@ class FluentArrayTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testInsertBefore()
     {
         // Test integers
@@ -80,12 +91,12 @@ class FluentArrayTest extends TestCase
         $source = arr([1, 3, 4]);
         $expected = [1, 3, 4];
 
-        $this->assertEquals($expected, $source->insertBefore('3', 2)->getArray());
+        $this->assertEquals($expected, $source->insertBefore("3", 2)->getArray());
 
         $source = arr([1, 3, 4]);
         $expected = [1, 2, 3, 4];
 
-        $this->assertEquals($expected, $source->insertBefore('3', 2, null, false)->getArray());
+        $this->assertEquals($expected, $source->insertBefore("3", 2, null, false)->getArray());
 
         // Test associative array
         // -------------------------------------
@@ -135,17 +146,23 @@ class FluentArrayTest extends TestCase
         $this->assertEquals($expected, $source->insertBefore("banana", "avocado", "four")->getArray());
     }
 
+    /**
+     * @return void
+     */
     public function testPositionOf()
     {
         $arr = arr(["one", "two", "three", 4]);
 
         $this->assertEquals(2, $arr->positionOf("two"));
         $this->assertEquals(4, $arr->positionOf(4));
-        $this->assertNull($arr->positionOf('4'));
-        $this->assertEquals(4, $arr->positionOf('4', false));
+        $this->assertNull($arr->positionOf("4"));
+        $this->assertEquals(4, $arr->positionOf("4", false));
         $this->assertNull($arr->positionOf("four"));
     }
 
+    /**
+     * @return void
+     */
     public function testPositionOfKey()
     {
         $arr = arr([
@@ -157,11 +174,14 @@ class FluentArrayTest extends TestCase
 
         $this->assertEquals(2, $arr->positionOfKey("two"));
         $this->assertEquals(4, $arr->positionOfKey(4));
-        $this->assertNull($arr->positionOfKey('4'));
-        $this->assertEquals(4, $arr->positionOfKey('4', false));
+        $this->assertNull($arr->positionOfKey("4"));
+        $this->assertEquals(4, $arr->positionOfKey("4", false));
         $this->assertNull($arr->positionOfKey("four"));
     }
 
+    /**
+     * @return void
+     */
     public function testRemove()
     {
         $source = arr([
