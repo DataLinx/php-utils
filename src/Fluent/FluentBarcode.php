@@ -245,7 +245,7 @@ class FluentBarcode
      * @return string The saved file location
      * @throws Exception
      */
-    public function save(string $filename = null)
+    public function save(string $filename = null): string
     {
         if ($filename) {
             // Attempt to set format by the specified file's extension

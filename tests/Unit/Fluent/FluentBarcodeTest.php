@@ -2,6 +2,7 @@
 
 namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Picqer\Barcode\BarcodeGenerator;
 
@@ -11,7 +12,7 @@ class FluentBarcodeTest extends TestCase
 {
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function testBasic()
     {
@@ -51,7 +52,7 @@ class FluentBarcodeTest extends TestCase
 
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function testAllParameters()
     {
@@ -78,7 +79,6 @@ class FluentBarcodeTest extends TestCase
         $file = $barcode->save();
         $this->assertFileExists($file);
 
-        //$barcode = barcode("9313920040041");
         $barcode
             ->setColor(null)
             ->setFormat("html")
@@ -90,7 +90,7 @@ class FluentBarcodeTest extends TestCase
 
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function testEmbed()
     {
@@ -110,6 +110,7 @@ class FluentBarcodeTest extends TestCase
 
     /**
      * @return void
+     * @throws Exception
      */
     public function testSave()
     {
@@ -137,7 +138,7 @@ class FluentBarcodeTest extends TestCase
 
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function testSetColor()
     {
@@ -150,7 +151,7 @@ class FluentBarcodeTest extends TestCase
 
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
 
      */
     public function testValidateColor()

@@ -230,7 +230,7 @@ class FluentString
      * @param array $placeholders
      * @return $this
      */
-    public function parsePlaceholders(array $placeholders)
+    public function parsePlaceholders(array $placeholders): self
     {
         $from = [];
         $to = [];

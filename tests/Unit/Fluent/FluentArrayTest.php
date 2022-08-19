@@ -149,6 +149,139 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
+    public function testInsertBeforeKey()
+    {
+        // Test insertion at the beginning of the array with a specific key
+        // -------------------------------------
+        $source = arr([
+            "one" => 1,
+            "two" => 2,
+            "four" => 4,
+        ]);
+        $expected = arr([
+            "zero" => 0,
+            "one" => 1,
+            "two" => 2,
+            "four" => 4,
+        ]);
+
+        $this->assertEquals($expected, $source->insertBeforeKey("one", 0, "zero"));
+
+        // Test insertion in the middle of the array with a specific key
+        // -------------------------------------
+        $source = arr([
+           "one" => 1,
+           "two" => 2,
+           "four" => 4,
+        ]);
+        $expected = arr([
+            "one" => 1,
+            "two" => 2,
+            "three" => 3,
+            "four" => 4,
+        ]);
+
+        $this->assertEquals($expected, $source->insertBeforeKey("four", 3, "three", false));
+
+        // Test insertion of the array with a specific key that does not exits
+        // -------------------------------------
+        $source = arr([
+            "one" => 1,
+            "two" => 2,
+            "four" => 4,
+        ]);
+
+        $this->expectExceptionMessage("The provided \"before\" key does not exist in the array!");
+        $source->insertBeforeKey("five", 3, "three", false);
+
+        // Test insertion at the beginning of the array with a position index
+        // -------------------------------------
+        $source = arr([1, 2, 4]);
+        $expected = arr([0, 1, 2, 4]);
+
+        $this->assertEquals($expected, $source->insertBeforeKey(0, 0));
+
+        // Test insertion in the middle of the array with a position index
+        // -------------------------------------
+        $source = arr([1, 2, 4]);
+        $expected = arr([1, 2, 3, 4]);
+
+        $this->assertEquals($expected, $source->insertBeforeKey(2, 3));
+
+        // Test insertion of the array with a position index that is out of range
+        // -------------------------------------
+        $source = arr([1, 2, 4]);
+        $expected = arr([1, 2, 4]);
+
+        $this->assertEquals($expected, $source->insertBeforeKey(100, 3));
+    }
+
+    /**
+     * @return void
+     */
+    public function testInsertAfterKey()
+    {
+        // Test insertion at the end of the array with a specific key
+        // -------------------------------------
+        $source = arr([
+            "one" => 1,
+            "two" => 2,
+            "four" => 4,
+        ]);
+        $expected = arr([
+            "one" => 1,
+            "two" => 2,
+            "four" => 4,
+            "five" => 5,
+        ]);
+
+        $this->assertEquals($expected, $source->insertAfterKey("four", 5, "five"));
+
+        // Test insertion in the middle of the array with a specific key
+        // -------------------------------------
+        $source = arr([
+            "one" => 1,
+            "two" => 2,
+            "four" => 4,
+        ]);
+        $expected = arr([
+            "one" => 1,
+            "two" => 2,
+            "three" => 3,
+            "four" => 4,
+        ]);
+
+        $this->assertEquals($expected, $source->insertAfterKey("two", 3, "three", false));
+
+        // Test insertion of the array with a specific key that does not exits
+        // -------------------------------------
+        $source = arr([
+            "one" => 1,
+            "two" => 2,
+            "four" => 4,
+        ]);
+
+        $this->expectExceptionMessage("The provided \"after\" key does not exist in the array!");
+        $source->insertAfterKey("five", 3, "three", false);
+
+        // Test insertion in the middle of the array with a position index
+        // -------------------------------------
+        $source = arr([1, 2, 4]);
+        $expected = arr([1, 2, 3, 4]);
+
+        $this->assertEquals($expected, $source->insertAfterKey(1, 3));
+
+        // Test insertion at the end of the array with a position index
+        // -------------------------------------
+        $source = arr([1, 2, 4]);
+        $expected = arr([1, 2, 4, 5]);
+
+        $this->assertEquals($expected, $source->insertAfterKey(2, 5));
+    }
+
+    /**
+     * @return void
+     */
     public function testPositionOf()
     {
         $arr = arr(["one", "two", "three", 4]);
