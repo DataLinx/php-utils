@@ -2,6 +2,7 @@
 
 use DataLinx\PhpUtils\Fluent\FluentArray;
 use DataLinx\PhpUtils\Fluent\FluentBarcode;
+use DataLinx\PhpUtils\Fluent\FluentDirectory;
 use DataLinx\PhpUtils\Fluent\FluentNumber;
 use DataLinx\PhpUtils\Fluent\FluentString;
 
@@ -51,5 +52,18 @@ if (! function_exists('barcode')) {
     function barcode(string $code, string $type = null): FluentBarcode
     {
         return new FluentBarcode($code, $type);
+    }
+}
+
+if (! function_exists('directory')) {
+    /**
+     * Create a new FluentDirectory object
+     *
+     * @param string $path Directory path
+     * @return FluentDirectory
+     */
+    function directory(string $path)
+    {
+        return new FluentDirectory($path);
     }
 }
