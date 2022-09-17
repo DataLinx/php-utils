@@ -46,10 +46,8 @@ class FluentDirectory
         $dirs = [];
         $files = [];
 
-        foreach (scandir($this->path) as $item)
-        {
-            if ($item === '.' or $item === '..')
-            {
+        foreach (scandir($this->path) as $item) {
+            if ($item === '.' || $item === '..') {
                 continue;
             }
 

@@ -62,7 +62,7 @@ if (! function_exists('directory')) {
      * @param string $path Directory path
      * @return FluentDirectory
      */
-    function directory(string $path)
+    function directory(string $path): FluentDirectory
     {
         return new FluentDirectory($path);
     }

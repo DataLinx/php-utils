@@ -9,6 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 require "./src/fluent_helpers.php";
 
+/**
+ * @covers \DataLinx\PhpUtils\Fluent\FluentDirectory
+ */
 class FluentDirectoryTest extends TestCase
 {
     private static string $work_dir = 'build/directory_test';
