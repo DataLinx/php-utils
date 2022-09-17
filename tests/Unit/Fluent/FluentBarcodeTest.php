@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
 use Exception;
@@ -8,13 +10,16 @@ use Picqer\Barcode\BarcodeGenerator;
 
 require_once "./src/fluent_helpers.php";
 
+/**
+ * @covers \DataLinx\PhpUtils\Fluent\FluentBarcode
+ */
 class FluentBarcodeTest extends TestCase
 {
     /**
      * @return void
      * @throws Exception
      */
-    public function testBasic()
+    public function testBasic(): void
     {
         if (! file_exists("./build")) {
             mkdir("./build");
@@ -54,7 +59,7 @@ class FluentBarcodeTest extends TestCase
      * @return void
      * @throws Exception
      */
-    public function testAllParameters()
+    public function testAllParameters(): void
     {
         $barcode = barcode("9313920040041")
             ->setFormat("svg")
@@ -92,7 +97,7 @@ class FluentBarcodeTest extends TestCase
      * @return void
      * @throws Exception
      */
-    public function testEmbed()
+    public function testEmbed(): void
     {
         $barcode = barcode("9313920040041");
 
@@ -112,7 +117,7 @@ class FluentBarcodeTest extends TestCase
      * @return void
      * @throws Exception
      */
-    public function testSave()
+    public function testSave(): void
     {
         $barcode = barcode("9313920040041");
 
@@ -140,7 +145,7 @@ class FluentBarcodeTest extends TestCase
      * @return void
      * @throws Exception
      */
-    public function testSetColor()
+    public function testSetColor(): void
     {
         $barcode = barcode("9313920040041");
 
@@ -154,7 +159,7 @@ class FluentBarcodeTest extends TestCase
      * @throws Exception
 
      */
-    public function testValidateColor()
+    public function testValidateColor(): void
     {
         $barcode = barcode("9313920040041");
         $this->expectExceptionMessage("The selected format requires a hex code or color name.");
