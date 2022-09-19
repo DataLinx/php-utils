@@ -3,6 +3,7 @@
 namespace DataLinx\PhpUtils\Fluent;
 
 use Exception;
+use InvalidArgumentException;
 use Picqer\Barcode\BarcodeGenerator;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Picqer\Barcode\BarcodeGeneratorJPG;
@@ -69,7 +70,9 @@ class FluentBarcode
      */
     public function __construct(string $code, string $type = null)
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         if (! class_exists("Picqer\Barcode\Barcode")) {
+            /** @noinspection ThrowRawExceptionInspection */
             throw new Exception("You need to install the picqer/php-barcode-generator package to use the FluentBarcode utility!");
         }
 
@@ -302,7 +305,7 @@ class FluentBarcode
     private function getGenerator()
     {
         if (empty($this->format)) {
-            throw new Exception("Barcode format is required");
+            throw new InvalidArgumentException("Barcode format is required");
         }
 
         if (!isset(self::$generators[$this->format])) {
@@ -319,7 +322,7 @@ class FluentBarcode
                     }
                     break;
                 default:
-                    throw new Exception("Barcode format $this->format is unknown!");
+                    throw new InvalidArgumentException("Barcode format $this->format is unknown!");
             }
         }
 
@@ -340,7 +343,7 @@ class FluentBarcode
             case self::FORMAT_HTML:
             case self::FORMAT_SVG:
                 if (!is_string($color)) {
-                    throw new Exception("The selected format requires a hex code or color name.");
+                    throw new InvalidArgumentException("The selected format requires a hex code or color name.");
                 }
                 break;
 
@@ -348,13 +351,12 @@ class FluentBarcode
                 // For PNG and JPG, we need an RGB format
                 $colorFormatErrMsg = "When using the PNG or JPG format the color must be in a valid RGB format (example: [55, 85, 155])";
                 if (is_array($color)) {
-                    if (! count($color) == 3 and min($color) >= 0 and max($color) <= 255) {
-                        throw new Exception($colorFormatErrMsg);
+                    if (count($color) !== 3 && min($color) >= 0 && max($color) <= 255) {
+                        throw new InvalidArgumentException($colorFormatErrMsg);
                     }
                 } else {
-                    throw new Exception($colorFormatErrMsg);
+                    throw new InvalidArgumentException($colorFormatErrMsg);
                 }
-
 
                 break;
         }
