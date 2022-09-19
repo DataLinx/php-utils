@@ -93,7 +93,7 @@ class FluentArray
      * @param bool $strict Use strict comparison (same type and value)
      * @return $this
      */
-    public function insertBefore($before, $value, $key = null, bool $strict = true): self
+    public function insertBefore($before, $value, ?string $key = null, bool $strict = true): self
     {
         $new = [];
         $should_insert = null;
@@ -142,7 +142,7 @@ class FluentArray
      * @param bool $strict Use strict comparison (same type and value)
      * @return $this
      */
-    public function insertBeforeKey($before, $value, $key = null, bool $strict = true): self
+    public function insertBeforeKey($before, $value, ?string $key = null, bool $strict = true): self
     {
         if (! array_key_exists($before, $this->array)) {
             throw new InvalidArgumentException("The provided \"before\" key does not exist in the array!");
@@ -188,7 +188,7 @@ class FluentArray
      * @param bool $strict Use strict comparison (same type and value)
      * @return $this
      */
-    public function insertAfterKey($after, $value, $key = null, bool $strict = true): self
+    public function insertAfterKey($after, $value, ?string $key = null, bool $strict = true): self
     {
         if (! array_key_exists($after, $this->array)) {
             throw new InvalidArgumentException("The provided \"after\" key does not exist in the array!");
