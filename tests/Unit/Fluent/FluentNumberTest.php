@@ -13,7 +13,7 @@ class FluentNumberTest extends TestCase
     /**
      * @return void
      */
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $amount = num(123);
 
@@ -27,7 +27,7 @@ class FluentNumberTest extends TestCase
     /**
      * @return void
      */
-    public function testToString()
+    public function testToString(): void
     {
         $amount = num(55);
 
@@ -37,7 +37,7 @@ class FluentNumberTest extends TestCase
     /**
      * @return void
      */
-    public function testToRoman()
+    public function testToRoman(): void
     {
         $cases = [
             1 => "I",

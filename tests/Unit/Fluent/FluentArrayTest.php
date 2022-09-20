@@ -13,7 +13,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $numbers = arr([1, 2, 3]);
 
@@ -27,7 +27,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals(print_r([1,2,3], true), (string)arr([1,2,3]));
     }
@@ -35,7 +35,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testFlatten()
+    public function testFlatten(): void
     {
         // tests without target array
         $cases = [
@@ -63,7 +63,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testInsertBefore()
+    public function testInsertBefore(): void
     {
         // Test integers
         // -------------------------------------
@@ -149,7 +149,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testInsertBeforeKey()
+    public function testInsertBeforeKey(): void
     {
         // Test insertion at the beginning of the array with a specific key
         // -------------------------------------
@@ -219,7 +219,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testInsertAfterKey()
+    public function testInsertAfterKey(): void
     {
         // Test insertion at the end of the array with a specific key
         // -------------------------------------
@@ -282,7 +282,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testPositionOf()
+    public function testPositionOf(): void
     {
         $arr = arr(["one", "two", "three", 4]);
 
@@ -296,7 +296,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testPositionOfKey()
+    public function testPositionOfKey(): void
     {
         $arr = arr([
             "one" => "apple",
@@ -315,7 +315,7 @@ class FluentArrayTest extends TestCase
     /**
      * @return void
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $source = arr([
             "one" => "apple",

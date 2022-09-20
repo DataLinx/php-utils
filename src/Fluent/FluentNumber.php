@@ -77,13 +77,13 @@ class FluentNumber
 
         foreach ($lookup as $roman => $value) {
             // Determine the number of matches
-            $matches = intval($n / $value);
+            $matches = (int)($n / $value);
 
             // Store that many characters
             $result .= str_repeat($roman, $matches);
 
             // Subtract that from the number
-            $n = $n % $value;
+            $n %= $value;
         }
 
         // The Roman numeral should be built, return it

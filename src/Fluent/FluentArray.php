@@ -81,7 +81,7 @@ class FluentArray
 
     public function __toString()
     {
-        return print_r($this->getArray(), true);
+        return (string)print_r($this->getArray(), true);
     }
 
     /**
@@ -106,7 +106,9 @@ class FluentArray
                     if ($v === $before) {
                         $should_insert = true;
                     }
-                } elseif ($v == $before) {
+                }
+                /** @noinspection TypeUnsafeComparisonInspection */
+                elseif ($v == $before) {
                     $should_insert = true;
                 }
             }
@@ -168,7 +170,9 @@ class FluentArray
                     if ($k === $before) {
                         $this->array = array_merge(array_slice($this->array, 0, $index), $insert, array_slice($this->array, $index));
                     }
-                } elseif ($k == $before) {
+                }
+                /** @noinspection TypeUnsafeComparisonInspection */
+                elseif ($k == $before) {
                     $this->array = array_merge(array_slice($this->array, 0, $index), $insert, array_slice($this->array, $index));
                 }
 
@@ -214,7 +218,9 @@ class FluentArray
                     if ($k === $after) {
                         $this->array = array_merge(array_slice($this->array, 0, $index + 1), $insert, array_slice($this->array, $index + 1));
                     }
-                } elseif ($k == $after) {
+                }
+                /** @noinspection TypeUnsafeComparisonInspection */
+                elseif ($k == $after) {
                     $this->array = array_merge(array_slice($this->array, 0, $index + 1), $insert, array_slice($this->array, $index + 1));
                 }
 
@@ -241,7 +247,9 @@ class FluentArray
                 if ($element === $value) {
                     return $pos;
                 }
-            } elseif ($element == $value) {
+            }
+            /** @noinspection TypeUnsafeComparisonInspection */
+            elseif ($element == $value) {
                 return $pos;
             }
             $pos++;
@@ -266,7 +274,9 @@ class FluentArray
                 if ($e_key === $key) {
                     return $pos;
                 }
-            } elseif ($e_key == $key) {
+            }
+            /** @noinspection TypeUnsafeComparisonInspection */
+            elseif ($e_key == $key) {
                 return $pos;
             }
             $pos++;
@@ -284,12 +294,13 @@ class FluentArray
      */
     public function remove($value, bool $strict = true): self
     {
-        $this->array = array_filter($this->array, function ($element) use ($value, $strict) {
+        $this->array = array_filter($this->array, static function ($element) use ($value, $strict) {
             if (is_array($value)) {
                 return ! in_array($element, $value, $strict);
-            } else {
-                return $strict ? ($element !== $value) : ($element != $value);
             }
+
+            /** @noinspection TypeUnsafeComparisonInspection */
+            return $strict ? ($element !== $value) : ($element != $value);
         });
 
         return $this;

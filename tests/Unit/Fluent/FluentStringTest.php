@@ -13,7 +13,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $sentence = str("First string");
 
@@ -27,7 +27,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testHtml2Plain()
+    public function testHtml2Plain(): void
     {
         $cases = [
             ["input" => "<p>This is a test paragraph.</p>", "expected" => "This is a test paragraph."],
@@ -44,7 +44,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testLinkHashtags()
+    public function testLinkHashtags(): void
     {
         $cases = [
             "#this is something" => "<a class=\"hashtag\" href=\"https://www.example.com/this\" data-tag=\"this\">#this</a> is something",
@@ -73,7 +73,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testCamel2Snake()
+    public function testCamel2Snake(): void
     {
         $cases = [
             "camelCase" => "camel_case",
@@ -88,7 +88,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testSnake2Camel()
+    public function testSnake2Camel(): void
     {
         $this->assertEquals("PascalCase", str("pascal_case")->snakeToCamel());
 
@@ -98,7 +98,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testClean()
+    public function testClean(): void
     {
         $cases = [
             "mark  " => "mark",
@@ -120,7 +120,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testToAddressArray()
+    public function testToAddressArray(): void
     {
         $cases = [
             "Pot v X 123b" => [
@@ -178,7 +178,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testParsePlaceholders()
+    public function testParsePlaceholders(): void
     {
         // Set encoding detection order - from widest to narrowest
         // See this comment from 17 years ago: https://www.php.net/manual/en/function.mb-detect-encoding.php#51389
@@ -245,7 +245,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testTruncate()
+    public function testTruncate(): void
     {
         $this->assertEquals(
             "This is a happy...",
@@ -286,7 +286,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testPrepMetaDescription()
+    public function testPrepMetaDescription(): void
     {
         $this->assertEquals("This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description...", str("This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote.")->prepMetaDescription());
         $this->assertEquals("This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description...", str("<p>This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote. This is a very nice meta description that we just wrote.</p>")->prepMetaDescription());
@@ -298,7 +298,7 @@ class FluentStringTest extends TestCase
     /**
      * @return void
      */
-    public function testExtractYouTubeHash()
+    public function testExtractYouTubeHash(): void
     {
         $this->assertEquals("FQPbLJ__wdQ", str("https://www.youtube.com/watch?v=FQPbLJ__wdQ")->extractYouTubeHash());
         $this->assertEquals("FQPbLJ__wdQ", str("http://www.youtube.com/watch?v=FQPbLJ__wdQ")->extractYouTubeHash());

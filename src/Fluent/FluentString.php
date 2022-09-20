@@ -117,8 +117,8 @@ class FluentString
     {
         $this->value = preg_replace_callback(
             "#(^|[a-z])([A-Z])#",
-            function (array $matches) {
-                if (0 === strlen($matches[1])) {
+            static function (array $matches) {
+                if ($matches[1] === '') {
                     $result = $matches[2];
                 } else {
                     $result = "$matches[1]_$matches[2]";
@@ -240,8 +240,8 @@ class FluentString
         foreach ($placeholders as $key => $val) {
             $key_encoding = mb_detect_encoding($key);
             $val_encoding = mb_detect_encoding($val);
-            $from[] = "{". ($key_encoding != $subject_encoding ? mb_convert_encoding($key, $subject_encoding, $key_encoding) : $key) ."}";
-            $to[] = $val_encoding != $subject_encoding ? mb_convert_encoding($val, $subject_encoding, $val_encoding) : $val;
+            $from[] = "{". ($key_encoding !== $subject_encoding ? mb_convert_encoding($key, $subject_encoding, $key_encoding) : $key) ."}";
+            $to[] = $val_encoding !== $subject_encoding ? mb_convert_encoding($val, $subject_encoding, $val_encoding) : $val;
         }
 
         $this->value = str_replace($from, $to, $this->value);
@@ -262,7 +262,7 @@ class FluentString
      */
     public function truncate(int $length = 80, ?string $etc = null, bool $break_words = false, bool $middle = false): self
     {
-        if ($length == 0) {
+        if ($length === 0) {
             return $this;
         }
 
