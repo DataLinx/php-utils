@@ -306,5 +306,6 @@ class FluentStringTest extends TestCase
         $this->assertEquals("FQPbLJ__wdQ", str("http://youtu.be/FQPbLJ__wdQ")->extractYouTubeHash());
         $this->assertEquals("FQPbLJ__wdQ", str("https://youtu.be/FQPbLJ__wdQ")->extractYouTubeHash());
         $this->assertNull(str("https://you.be/FQPbLJ__wdQ")->extractYouTubeHash());
+        $this->assertEquals("W6eQhzKb0lc", str("https://www.youtube.com/shorts/W6eQhzKb0lc")->extractYouTubeHash());
     }
 }

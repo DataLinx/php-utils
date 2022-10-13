@@ -325,7 +325,12 @@ class FluentString
         // Format: http://youtu.be/FQPbLJ__wdQ
         $matches = [];
 
-        if (preg_match("/youtu.be\/(.*)/", $this->value, $matches)) {
+        if (preg_match("/youtu\.be\/(.*)/", $this->value, $matches)) {
+            return $matches[1];
+        }
+
+        // Format: https://www.youtube.com/shorts/W6eQhzKb0lc
+        if (preg_match("/\/shorts\/(.*)/i", $this->value, $matches)) {
             return $matches[1];
         }
 
