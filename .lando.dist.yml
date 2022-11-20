@@ -1,0 +1,20 @@
+name: php-utils
+recipe: lemp
+config:
+  webroot: .
+  php: "7.4"
+  xdebug: debug,coverage,develop
+  config:
+    php: config/php.ini
+services:
+  appserver:
+    overrides:
+      environment:
+        # Support debugging CLI with XDEBUG.
+        PHP_IDE_CONFIG: "serverName=appserver"
+        XDEBUG_SESSION_START: lando
+tooling:
+  phpunit:
+    service: appserver
+    description: Run PHPUnit tests
+    cmd: "/app/vendor/bin/phpunit"
