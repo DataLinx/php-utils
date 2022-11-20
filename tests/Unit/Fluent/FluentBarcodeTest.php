@@ -8,8 +8,6 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Picqer\Barcode\BarcodeGenerator;
 
-require_once "./src/fluent_helpers.php";
-
 /**
  * @covers \DataLinx\PhpUtils\Fluent\FluentBarcode
  */

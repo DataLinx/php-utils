@@ -7,8 +7,6 @@ namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-require "./src/fluent_helpers.php";
-
 /**
  * @covers \DataLinx\PhpUtils\Fluent\FluentDirectory
  */

@@ -6,8 +6,6 @@ namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
 use PHPUnit\Framework\TestCase;
 
-require_once "./src/fluent_helpers.php";
-
 class FluentArrayTest extends TestCase
 {
     /**

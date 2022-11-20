@@ -6,8 +6,6 @@ namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
 use PHPUnit\Framework\TestCase;
 
-require "./src/fluent_helpers.php";
-
 class FluentNumberTest extends TestCase
 {
     /**
