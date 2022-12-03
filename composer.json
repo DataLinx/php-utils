@@ -32,7 +32,9 @@
         "jaschilz/php-coverage-badger": "^2.0"
     },
     "suggest": {
-        "picqer/php-barcode-generator": "Required to use FluentBarcode"
+        "picqer/php-barcode-generator": "Required to use FluentBarcode",
+        "ext-gd": "For FluentBarcode JPG and PNG generators, GD or Imagick is required",
+        "ext-imagick": "For FluentBarcode JPG and PNG generators, GD or Imagick is required"
     },
     "scripts": {
         "test": "vendor/bin/phpunit"
