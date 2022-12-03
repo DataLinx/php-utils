@@ -12,16 +12,16 @@ permissions:
 jobs:
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: true
       matrix:
-#        os: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest, windows-latest ]
         php: [ 7.4, 8.0, 8.1 ]
 #        dependency-version: [ prefer-lowest, prefer-stable ]
 
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} / ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
