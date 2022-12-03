@@ -33,5 +33,8 @@
     },
     "suggest": {
         "picqer/php-barcode-generator": "Required to use FluentBarcode"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }
