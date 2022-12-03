@@ -29,9 +29,9 @@ class FluentStringTest extends TestCase
     {
         $cases = [
             ["input" => "<p>This is a test paragraph.</p>", "expected" => "This is a test paragraph."],
-            ["input" => "<p>This is a test paragraph.</p><p>This is another paragraph,<br/>but it has a line break.</p>", "expected" => "This is a test paragraph.\n\nThis is another paragraph,\nbut it has a line break."],
-            ["input" => "This is the first line break.<br>This is the second line break.<br/>And this is the third one.<br />", "expected" => "This is the first line break.\nThis is the second line break.\nAnd this is the third one."],
-            ["input" => "  <p>This is a test paragraph.</p>No paragraph.  ", "expected" => "This is a test paragraph.\n\nNo paragraph."],
+            ["input" => "<p>This is a test paragraph.</p><p>This is another paragraph,<br/>but it has a line break.</p>", "expected" => "This is a test paragraph." . PHP_EOL . PHP_EOL . "This is another paragraph," . PHP_EOL . "but it has a line break."],
+            ["input" => "This is the first line break.<br>This is the second line break.<br/>And this is the third one.<br />", "expected" => "This is the first line break." . PHP_EOL . "This is the second line break." . PHP_EOL . "And this is the third one."],
+            ["input" => "  <p>This is a test paragraph.</p>No paragraph.  ", "expected" => "This is a test paragraph." . PHP_EOL . PHP_EOL . "No paragraph."],
         ];
 
         foreach ($cases as $case) {
