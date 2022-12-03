@@ -19,9 +19,9 @@ jobs:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
         php: [ 7.4, 8.0, 8.1 ]
-#        dependency-version: [ prefer-lowest, prefer-stable ]
+        dependency-version: [ prefer-lowest, prefer-stable ]
 
-    name: PHP ${{ matrix.php }} / ${{ matrix.os }}
+    name: ${{ runner.os }} / PHP ${{ matrix.php }} / ${{ matrix.dependency-version }}
 
     steps:
     - uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: vendor
-        key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+        key: ${{ runner.os }}-php-${{ matrix.php }}-${{ matrix.dependency-version }}-${{ hashFiles('**/composer.lock') }}
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -43,7 +43,7 @@ jobs:
         extensions: mbstring, gd
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      run: composer install --prefer-dist --no-progress --${{ matrix.dependency-version }}
 
     - name: Run test suite
       run: composer run-script test
