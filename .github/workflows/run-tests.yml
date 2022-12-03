@@ -43,7 +43,7 @@ jobs:
         extensions: mbstring, gd
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --${{ matrix.dependency-version }}
+      run: composer update --prefer-dist --no-progress --${{ matrix.dependency-version }}
 
     - name: Run test suite
       run: composer run-script test
