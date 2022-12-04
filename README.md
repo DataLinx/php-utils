@@ -5,6 +5,7 @@
 ![Coverage 100%](assets/coverage.svg)
 ![Packagist License](https://img.shields.io/packagist/l/datalinx/php-utils)
 ![Packagist Downloads](https://img.shields.io/packagist/dt/datalinx/php-utils)
+[![Test runner](https://github.com/DataLinx/php-utils/actions/workflows/run-tests.yml/badge.svg)](https://github.com/DataLinx/php-utils/actions/workflows/run-tests.yml)
 
 ## About
 This package is a collection of classes that provide a fluent OOP interface to manipulate common primitive data types such as strings, numbers, arrays and other structures by providing a lean wrapper around libraries from other packages. 
@@ -15,6 +16,7 @@ See the changelog [here](CHANGELOG.md).
 - PHP >= 7.4
 - `mbstring` PHP extension
 - `picqer/php-barcode-generator` package, if you want to use the `FluentBarcode` wrapper
+- Linux and Windows Server are supported
 
 ## Installing
 Download it with composer:
