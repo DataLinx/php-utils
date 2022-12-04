@@ -281,7 +281,7 @@ class FluentString
             if (!$middle) {
                 $this->value = trim(mb_substr($this->value, 0, $length), $endings) . $etc;
             } else {
-                $this->value = trim(mb_substr($this->value, 0, $length / 2), $endings) . $etc . ltrim(mb_substr($this->value, - $length / 2, $length), $endings);
+                $this->value = trim(mb_substr($this->value, 0, floor($length / 2)), $endings) . $etc . ltrim(mb_substr($this->value, - floor($length / 2), $length), $endings);
             }
         }
 
@@ -316,10 +316,13 @@ class FluentString
     {
         // Format: https://www.youtube.com/watch?v=FQPbLJ__wdQ
         $query = parse_url($this->value, PHP_URL_QUERY);
-        parse_str($query, $params);
 
-        if (isset($params["v"])) {
-            return $params["v"];
+        if ($query) {
+            parse_str($query, $params);
+
+            if (isset($params["v"])) {
+                return $params["v"];
+            }
         }
 
         // Format: http://youtu.be/FQPbLJ__wdQ
