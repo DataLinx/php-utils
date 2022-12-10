@@ -36,6 +36,7 @@ class FluentArray
     public function setArray(array $array): FluentArray
     {
         $this->array = $array;
+
         return $this;
     }
 
@@ -161,7 +162,7 @@ class FluentArray
         // inserting before specified associative key
         elseif (is_string($before)) {
             $index = 0;
-            foreach ($this->array as $k=>$element) {
+            foreach ($this->array as $k => $element) {
                 $insert = [
                     $key => $value,
                 ];
@@ -209,7 +210,7 @@ class FluentArray
         // inserting after specified associative key
         elseif (is_string($after)) {
             $index = 0;
-            foreach ($this->array as $k=>$element) {
+            foreach ($this->array as $k => $element) {
                 $insert = [
                     $key => $value,
                 ];

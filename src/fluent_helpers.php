@@ -40,7 +40,6 @@ if (! function_exists('arr')) {
 }
 
 if (! function_exists('barcode')) {
-
     /**
      * Create a new FluentBarcode object
      *

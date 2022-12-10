@@ -131,35 +131,35 @@ class FluentStringTest extends TestCase
             ],
             "Aljaževa, 20 a" => [
                 "Aljaževa",
-                "20a"
+                "20a",
             ],
             "Aškerčeva cesta, 22" => [
                 "Aškerčeva cesta",
-                "22"
+                "22",
             ],
             "B. Radić 88," => [
                 "B. Radić",
-                "88"
+                "88",
             ],
             "Bakovci, Cvetna ulica 24" => [
                 "Bakovci, Cvetna ulica",
-                "24"
+                "24",
             ],
             "Cesta 15.aprila 35" => [
                 "Cesta 15.aprila",
-                "35"
+                "35",
             ],
             "Cesta 20. Julija 13" => [
                 "Cesta 20. Julija",
-                "13"
+                "13",
             ],
             "Cesta II. Grupe Odredov 13c, 13c" => [
                 "Cesta II. Grupe Odredov",
-                "13c"
+                "13c",
             ],
             "Delavska C.57," => [
                 "Delavska C.",
-                "57"
+                "57",
             ],
         ];
 

@@ -39,6 +39,7 @@ class FluentString
     public function setValue(string $value): FluentString
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -123,6 +124,7 @@ class FluentString
                 } else {
                     $result = "$matches[1]_$matches[2]";
                 }
+
                 return strtolower($result);
             },
             $this->value
@@ -134,7 +136,7 @@ class FluentString
     /**
      * Convert a string from snake_case to camelCase or UpperCamelCase/PascalCase
      *
-     * @param boolean $upper Capitalize the first character
+     * @param bool $upper Capitalize the first character
      * @return $this
      */
     public function snakeToCamel(bool $upper = true): self
@@ -273,15 +275,15 @@ class FluentString
         if (mb_strlen($this->value) > $length) {
             $length -= min($length, mb_strlen($etc));
 
-            if (!$break_words && !$middle) {
+            if (! $break_words && ! $middle) {
                 $this->value = preg_replace("/\s+?(\S+)?$/", "", mb_substr($this->value, 0, $length + 1));
             }
 
             $endings = ".,!?-;:(\" ";
-            if (!$middle) {
+            if (! $middle) {
                 $this->value = trim(mb_substr($this->value, 0, $length), $endings) . $etc;
             } else {
-                $this->value = trim(mb_substr($this->value, 0, floor($length / 2)), $endings) . $etc . ltrim(mb_substr($this->value, - floor($length / 2), $length), $endings);
+                $this->value = trim(mb_substr($this->value, 0, floor($length / 2)), $endings) . $etc . ltrim(mb_substr($this->value, -floor($length / 2), $length), $endings);
             }
         }
 

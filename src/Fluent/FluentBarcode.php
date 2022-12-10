@@ -107,6 +107,7 @@ class FluentBarcode
     public function setCode(string $code): FluentBarcode
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -125,6 +126,7 @@ class FluentBarcode
     public function setType(string $type): FluentBarcode
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -143,6 +145,7 @@ class FluentBarcode
     public function setWidthFactor(int $widthFactor): FluentBarcode
     {
         $this->widthFactor = $widthFactor;
+
         return $this;
     }
 
@@ -161,6 +164,7 @@ class FluentBarcode
     public function setHeight(int $height): FluentBarcode
     {
         $this->height = $height;
+
         return $this;
     }
 
@@ -184,6 +188,7 @@ class FluentBarcode
         }
 
         $this->color = $color;
+
         return $this;
     }
 
@@ -226,12 +231,15 @@ class FluentBarcode
             case "svg":
                 $embed = "data:image/svg+xml;base64,";
                 break;
+
             case "png":
                 $embed = "data:image/png;base64,";
                 break;
+
             case "jpg":
                 $embed = "data:image/jpg;base64,";
                 break;
+
             default:
                 // For HTML, simply return the contents
                 return $this->getContents();
@@ -308,7 +316,7 @@ class FluentBarcode
             throw new InvalidArgumentException("Barcode format is required");
         }
 
-        if (!isset(self::$generators[$this->format])) {
+        if (! isset(self::$generators[$this->format])) {
             switch ($this->format) {
                 case self::FORMAT_SVG:
                 case self::FORMAT_PNG:
@@ -321,6 +329,7 @@ class FluentBarcode
                         self::$generators[$this->format]->useGd();
                     }
                     break;
+
                 default:
                     throw new InvalidArgumentException("Barcode format $this->format is unknown!");
             }
@@ -342,7 +351,7 @@ class FluentBarcode
         switch ($format ?? $this->format) {
             case self::FORMAT_HTML:
             case self::FORMAT_SVG:
-                if (!is_string($color)) {
+                if (! is_string($color)) {
                     throw new InvalidArgumentException("The selected format requires a hex code or color name.");
                 }
                 break;
@@ -357,8 +366,6 @@ class FluentBarcode
                 } else {
                     throw new InvalidArgumentException($colorFormatErrMsg);
                 }
-
-                break;
         }
     }
 }
