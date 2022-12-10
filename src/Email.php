@@ -14,8 +14,7 @@ class Email
     {
         $arr = explode('@', $email);
 
-        if (is_array($arr) and count($arr) === 2)
-        {
+        if (is_array($arr) and count($arr) === 2) {
             return checkdnsrr(end($arr));
         }
 
