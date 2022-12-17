@@ -306,4 +306,12 @@ class FluentStringTest extends TestCase
         $this->assertNull(str("https://you.be/FQPbLJ__wdQ")->extractYouTubeHash());
         $this->assertEquals("W6eQhzKb0lc", str("https://www.youtube.com/shorts/W6eQhzKb0lc")->extractYouTubeHash());
     }
+
+    public function testUppercaseFirst(): void
+    {
+        $this->assertEquals('Črt', str('črt')->uppercaseFirst());
+        $this->assertEquals('Šerbi', str('šerbi')->uppercaseFirst());
+        $this->assertEquals('Žan', str('žan')->uppercaseFirst());
+        $this->assertEquals('Çakmak', str('çakmak')->uppercaseFirst());
+    }
 }

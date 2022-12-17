@@ -341,4 +341,16 @@ class FluentString
 
         return null;
     }
+
+    /**
+     * Make a string's first character uppercase - supports multibyte/accented characters
+     *
+     * @return $this
+     */
+    public function uppercaseFirst(): string
+    {
+        $this->value = mb_strtoupper(mb_substr($this->value, 0, 1)) . mb_substr($this->value, 1);
+
+        return $this;
+    }
 }
