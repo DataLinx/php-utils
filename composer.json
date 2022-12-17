@@ -1,7 +1,11 @@
 {
     "name": "datalinx/php-utils",
     "description": "Collection of common helper functions organized into fluent classes",
-    "keywords": ["php", "helpers", "utilities"],
+    "keywords": [
+        "php",
+        "helpers",
+        "utilities"
+    ],
     "homepage": "https://github.com/datalinx/php-utils",
     "type": "library",
     "license": "MIT",
