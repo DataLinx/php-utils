@@ -347,9 +347,21 @@ class FluentString
      *
      * @return $this
      */
-    public function uppercaseFirst(): string
+    public function uppercaseFirst(): self
     {
         $this->value = mb_strtoupper(mb_substr($this->value, 0, 1)) . mb_substr($this->value, 1);
+
+        return $this;
+    }
+
+    /**
+     * Trim the string - supports unicode spaces
+     *
+     * @return $this
+     */
+    public function trim(): self
+    {
+        $this->value = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $this->value);
 
         return $this;
     }
