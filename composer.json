@@ -33,7 +33,6 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5.26",
         "picqer/php-barcode-generator": "^2.2.4",
-        "jaschilz/php-coverage-badger": "^2.0.0",
         "friendsofphp/php-cs-fixer": "^3.13"
     },
     "suggest": {

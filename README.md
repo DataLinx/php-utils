@@ -2,7 +2,7 @@
 
 ![Packagist Version](https://img.shields.io/packagist/v/datalinx/php-utils)
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/datalinx/php-utils)
-![Coverage 100%](assets/coverage.svg)
+[![codecov](https://codecov.io/gh/DataLinx/php-utils/branch/master/graph/badge.svg?token=47T4ZAX33D)](https://codecov.io/gh/DataLinx/php-utils)
 ![Packagist License](https://img.shields.io/packagist/l/datalinx/php-utils)
 ![Packagist Downloads](https://img.shields.io/packagist/dt/datalinx/php-utils)
 [![Test runner](https://github.com/DataLinx/php-utils/actions/workflows/run-tests.yml/badge.svg)](https://github.com/DataLinx/php-utils/actions/workflows/run-tests.yml)
