@@ -13,16 +13,32 @@ use Picqer\Barcode\BarcodeGenerator;
  */
 class FluentBarcodeTest extends TestCase
 {
+    private const ASSET_DIR = './build/assets';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (! file_exists(self::ASSET_DIR)) {
+            mkdir(self::ASSET_DIR, 0777, true);
+        }
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if (file_exists(self::ASSET_DIR)) {
+            directory(self::ASSET_DIR)->delete();
+        }
+    }
+
     /**
      * @return void
      * @throws Exception
      */
     public function testBasic(): void
     {
-        if (! file_exists("./build")) {
-            mkdir("./build");
-        }
-
         $barcode = barcode("9313920040041")
             ->setFormat("svg")
             ->setColor("black")
@@ -49,7 +65,7 @@ class FluentBarcodeTest extends TestCase
         $this->assertFileExists($file);
 
         // Save to a certain file
-        $file = $barcode->setFormat("svg")->save("./build/9313920040041.svg");
+        $file = $barcode->setFormat("svg")->save(self::ASSET_DIR . "/9313920040041.svg");
         $this->assertFileExists($file);
     }
 
@@ -127,14 +143,14 @@ class FluentBarcodeTest extends TestCase
         ];
 
         foreach ($cases as $case) {
-            $filename = $case[0] . "." . $case[1];
+            $file_path = self::ASSET_DIR . "/$case[0].$case[1]";
 
-            if (file_exists("./build/" . $filename)) {
-                unlink("./build/" . $filename);
+            if (file_exists($file_path)) {
+                unlink($file_path);
             }
 
             $barcode->setFormat($case[1]);
-            $file = $barcode->save("./build/" . $filename);
+            $file = $barcode->save($file_path);
             $this->assertFileExists($file);
         }
     }
