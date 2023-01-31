@@ -365,4 +365,20 @@ class FluentString
 
         return $this;
     }
+
+    /**
+     * Check if the email domain is a valid domain with MX records
+     *
+     * @return bool
+     */
+    public function isEmailDomainValid(): bool
+    {
+        $arr = explode('@', $this->value);
+
+        if (is_array($arr) && count($arr) === 2) {
+            return checkdnsrr(end($arr));
+        }
+
+        return false;
+    }
 }
