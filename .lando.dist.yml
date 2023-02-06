@@ -1,7 +1,7 @@
 name: php-utils
 services:
   appserver:
-    type: php:7.4
+    type: php:8.1
     via: cli
     webroot: .
     xdebug: "debug,coverage,develop"
