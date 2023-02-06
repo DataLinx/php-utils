@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.0.0](https://github.com/DataLinx/php-utils/compare/v1.2.0...v2.0.0) (2023-02-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **array:** renamd getArray method to toArray
+* **array:** removed insertAfterKey, insertBefore, insertBeforeKey
+* **string:** Merged (and deleted) Email helper into FluentString.
+
+### Miscellaneous Chores
+
+* fix export-ignore in .gitattributes ([d5f1f0e](https://github.com/DataLinx/php-utils/commit/d5f1f0e0cfa02cfe6d042b8003c083b6903b58fe))
+
+
+### Code Refactoring
+
+* **array:** improve FluentArray with more fluent methods ([f2e1e89](https://github.com/DataLinx/php-utils/commit/f2e1e8924a626978c5e7f84797e9c642860f4565))
+* **array:** renamed getArray method to toArray ([a66374e](https://github.com/DataLinx/php-utils/commit/a66374e30c64bb959a63d18159dc4f186948c7aa))
+* **string:** move email domain validation to FluentString ([89485b0](https://github.com/DataLinx/php-utils/commit/89485b037367686f6086c7ecff1abb75f592999d))
+
 ## [1.2.0](https://github.com/DataLinx/php-utils/compare/v1.1.0...v1.2.0) (2023-01-16)
 
 
