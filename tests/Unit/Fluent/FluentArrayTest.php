@@ -15,11 +15,11 @@ class FluentArrayTest extends TestCase
     {
         $numbers = arr([1, 2, 3]);
 
-        $this->assertEquals([1, 2, 3], $numbers->getArray());
+        $this->assertEquals([1, 2, 3], $numbers->toArray());
 
         $numbers->setArray([4, 5, 6]);
 
-        $this->assertEquals([4, 5, 6], $numbers->getArray());
+        $this->assertEquals([4, 5, 6], $numbers->toArray());
     }
 
     /**
@@ -43,7 +43,7 @@ class FluentArrayTest extends TestCase
         ];
 
         foreach ($cases as $case) {
-            $this->assertEquals($case["expected"], arr($case["input"])->flatten()->getArray());
+            $this->assertEquals($case["expected"], arr($case["input"])->flatten()->toArray());
         }
 
         // tests with target array
@@ -54,7 +54,7 @@ class FluentArrayTest extends TestCase
         ];
 
         foreach ($cases as $case) {
-            $this->assertEquals($case["expected"], arr($case["input"])->flatten($case["targetArray"])->getArray());
+            $this->assertEquals($case["expected"], arr($case["input"])->flatten($case["targetArray"])->toArray());
         }
     }
 
@@ -67,7 +67,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 3, 4];
         $expected = [1, 2, 3, 4];
-        $actual = arr($source)->before(3)->insert(2)->getArray();
+        $actual = arr($source)->before(3)->insert(2)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -75,7 +75,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = ["one", "three", "four"];
         $expected = ["one", "two", "three", "four"];
-        $actual = arr($source)->before("three")->insert("two")->getArray();
+        $actual = arr($source)->before("three")->insert("two")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -83,7 +83,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 3, 4, 5, 3, 6];
         $expected = [1, 2, 3, 4, 5, 3, 6];
-        $actual = arr($source)->before(3)->insert(2)->getArray();
+        $actual = arr($source)->before(3)->insert(2)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -91,13 +91,13 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 3, 4];
         $expected = [1, 3, 4];
-        $actual = arr($source)->before("3")->insert(2)->getArray();
+        $actual = arr($source)->before("3")->insert(2)->toArray();
 
         $this->assertEquals($expected, $actual);
 
         $source = [1, 3, 4];
         $expected = [1, 2, 3, 4];
-        $actual = arr($source)->before("3", false)->insert(2)->getArray();
+        $actual = arr($source)->before("3", false)->insert(2)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -114,7 +114,7 @@ class FluentArrayTest extends TestCase
             "three" => "banana",
             "four" => "orange",
         ];
-        $actual = arr($source)->before("banana")->insert("avocado")->getArray();
+        $actual = arr($source)->before("banana")->insert("avocado")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -131,7 +131,7 @@ class FluentArrayTest extends TestCase
             "three" => "banana",
             "four" => "orange",
         ];
-        $actual = arr($source)->before("banana")->insert("avocado", "two")->getArray();
+        $actual = arr($source)->before("banana")->insert("avocado", "two")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -147,7 +147,7 @@ class FluentArrayTest extends TestCase
             "three" => "banana",
             "four" => "orange",
         ];
-        $actual = arr($source)->before("banana")->insert("avocado", "four")->getArray();
+        $actual = arr($source)->before("banana")->insert("avocado", "four")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -155,7 +155,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [3, 4, 5];
         $expected = [2, 3, 4, 5];
-        $actual = arr($source)->before(3)->insert(2)->getArray();
+        $actual = arr($source)->before(3)->insert(2)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -163,7 +163,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [3, 4, 5];
         $expected = [3, 4, 5, 2];
-        $actual = arr($source)->insert(2)->getArray();
+        $actual = arr($source)->insert(2)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -171,7 +171,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [3, 4, 5];
         $expected = [3, 4, 5, "two" => 2];
-        $actual = arr($source)->insert(2, "two")->getArray();
+        $actual = arr($source)->insert(2, "two")->toArray();
 
         $this->assertEquals($expected, $actual);
     }
@@ -194,7 +194,7 @@ class FluentArrayTest extends TestCase
             "two" => 2,
             "four" => 4,
         ];
-        $actual = arr($source)->beforeKey("one")->insert(0, "zero")->getArray();
+        $actual = arr($source)->beforeKey("one")->insert(0, "zero")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -211,7 +211,7 @@ class FluentArrayTest extends TestCase
             "three" => 3,
             "four" => 4,
         ];
-        $actual = arr($source)->beforeKey("four", false)->insert(3, "three")->getArray();
+        $actual = arr($source)->beforeKey("four", false)->insert(3, "three")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -223,7 +223,7 @@ class FluentArrayTest extends TestCase
             "four" => 4,
         ];
         $expected = $source;
-        $actual = arr($source)->beforeKey("five", false)->insert(3, "three")->getArray();
+        $actual = arr($source)->beforeKey("five", false)->insert(3, "three")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -231,7 +231,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4];
         $expected = [0, 1, 2, 4];
-        $actual = arr($source)->beforeKey(0)->insert(0)->getArray();
+        $actual = arr($source)->beforeKey(0)->insert(0)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -239,7 +239,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4];
         $expected = [1, 2, 3, 4];
-        $actual = arr($source)->beforeKey(2)->insert(3)->getArray();
+        $actual = arr($source)->beforeKey(2)->insert(3)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -247,7 +247,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4];
         $expected = [1, 2, 4];
-        $actual = arr($source)->beforeKey(100)->insert(3)->getArray();
+        $actual = arr($source)->beforeKey(100)->insert(3)->toArray();
 
         $this->assertEquals($expected, $actual);
     }
@@ -258,7 +258,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4];
         $expected = [1, 2, 3, 4];
-        $actual = arr($source)->after(2)->insert(3)->getArray();
+        $actual = arr($source)->after(2)->insert(3)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -266,7 +266,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = ["one", "two", "four"];
         $expected = ["one", "two", "three", "four"];
-        $actual = arr($source)->after("two")->insert("three")->getArray();
+        $actual = arr($source)->after("two")->insert("three")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -274,7 +274,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4, 5, 2, 6];
         $expected = [1, 2, 3, 4, 5, 2, 6];
-        $actual = arr($source)->after(2)->insert(3)->getArray();
+        $actual = arr($source)->after(2)->insert(3)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -282,13 +282,13 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4];
         $expected = [1, 2, 4];
-        $actual = arr($source)->after("2")->insert(3)->getArray();
+        $actual = arr($source)->after("2")->insert(3)->toArray();
 
         $this->assertEquals($expected, $actual);
 
         $source = [1, 2, 4];
         $expected = [1, 2, 3, 4];
-        $actual = arr($source)->after("2", false)->insert(3)->getArray();
+        $actual = arr($source)->after("2", false)->insert(3)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -305,7 +305,7 @@ class FluentArrayTest extends TestCase
             "three" => "banana",
             "four" => "orange",
         ];
-        $actual = arr($source)->after("apple")->insert("avocado")->getArray();
+        $actual = arr($source)->after("apple")->insert("avocado")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -322,7 +322,7 @@ class FluentArrayTest extends TestCase
             "three" => "banana",
             "four" => "orange",
         ];
-        $actual = arr($source)->after("apple")->insert("avocado", "two")->getArray();
+        $actual = arr($source)->after("apple")->insert("avocado", "two")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -338,7 +338,7 @@ class FluentArrayTest extends TestCase
             "three" => "banana",
             "four" => "orange",
         ];
-        $actual = arr($source)->after("apple")->insert("avocado", "four")->getArray();
+        $actual = arr($source)->after("apple")->insert("avocado", "four")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -346,7 +346,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [3, 4, 5];
         $expected = [3, 4, 5, 6];
-        $actual = arr($source)->insert(6)->getArray();
+        $actual = arr($source)->insert(6)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -354,7 +354,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [3, 4, 5];
         $expected = [3, 4, 5, "six" => 6];
-        $actual = arr($source)->insert(6, "six")->getArray();
+        $actual = arr($source)->insert(6, "six")->toArray();
 
         $this->assertEquals($expected, $actual);
     }
@@ -377,7 +377,7 @@ class FluentArrayTest extends TestCase
             "four" => 4,
             "five" => 5,
         ];
-        $actual = arr($source)->afterKey("four")->insert(5, "five")->getArray();
+        $actual = arr($source)->afterKey("four")->insert(5, "five")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -394,7 +394,7 @@ class FluentArrayTest extends TestCase
             "three" => 3,
             "four" => 4,
         ];
-        $actual = arr($source)->afterKey("two", false)->insert(3, "three")->getArray();
+        $actual = arr($source)->afterKey("two", false)->insert(3, "three")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -406,7 +406,7 @@ class FluentArrayTest extends TestCase
             "four" => 4,
         ];
         $expected = $source;
-        $actual = arr($source)->afterKey("five", false)->insert(3, "three")->getArray();
+        $actual = arr($source)->afterKey("five", false)->insert(3, "three")->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -414,7 +414,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4];
         $expected = [1, 2, 3, 4];
-        $actual = arr($source)->afterKey(1)->insert(3)->getArray();
+        $actual = arr($source)->afterKey(1)->insert(3)->toArray();
 
         $this->assertEquals($expected, $actual);
 
@@ -422,7 +422,7 @@ class FluentArrayTest extends TestCase
         // -------------------------------------
         $source = [1, 2, 4];
         $expected = [1, 2, 4, 5];
-        $actual = arr($source)->afterKey(2)->insert(5)->getArray();
+        $actual = arr($source)->afterKey(2)->insert(5)->toArray();
 
         $this->assertEquals($expected, $actual);
     }
@@ -475,7 +475,7 @@ class FluentArrayTest extends TestCase
             "four" => "orange",
         ];
 
-        $this->assertEquals($expected, $source->remove("banana")->getArray());
+        $this->assertEquals($expected, $source->remove("banana")->toArray());
 
         // Test multiple removals
         $source = arr([
@@ -487,6 +487,6 @@ class FluentArrayTest extends TestCase
             "one" => "apple",
         ];
 
-        $this->assertEquals($expected, $source->remove(["banana", "orange"])->getArray());
+        $this->assertEquals($expected, $source->remove(["banana", "orange"])->toArray());
     }
 }

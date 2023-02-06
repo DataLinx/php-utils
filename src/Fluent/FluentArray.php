@@ -36,7 +36,7 @@ class FluentArray
     /**
      * @return array
      */
-    public function getArray(): array
+    public function toArray(): array
     {
         return $this->array;
     }
@@ -94,7 +94,7 @@ class FluentArray
 
     public function __toString()
     {
-        return (string)print_r($this->getArray(), true);
+        return (string)print_r($this->toArray(), true);
     }
 
     public function before($element, bool $strict = true): self
