@@ -2,14 +2,26 @@
 
 namespace DataLinx\PhpUtils\Fluent;
 
-use InvalidArgumentException;
-
 class FluentArray
 {
     /**
      * @var array Subject array
      */
     protected array $array;
+
+    /**
+     * @var mixed
+     */
+    private $before;
+
+    /**
+     * @var mixed
+     */
+    private $after;
+
+    private bool $beforeAfterKey = false;
+
+    private bool $strict = true;
 
     /**
      * Create a new FluentArray object
@@ -85,149 +97,115 @@ class FluentArray
         return (string)print_r($this->getArray(), true);
     }
 
+    public function before($element, bool $strict = true): self
+    {
+        $this->resetBeforeAfter();
+
+        $this->before = $element;
+        $this->beforeAfterKey = false;
+        $this->strict = $strict;
+
+        return $this;
+    }
+
+    public function beforeKey($key, bool $strict = true): self
+    {
+        $this->resetBeforeAfter();
+
+        $this->before = $key;
+        $this->beforeAfterKey = true;
+        $this->strict = $strict;
+
+        return $this;
+    }
+
+    public function after($element, bool $strict = true): self
+    {
+        $this->resetBeforeAfter();
+
+        $this->after = $element;
+        $this->beforeAfterKey = false;
+        $this->strict = $strict;
+
+        return $this;
+    }
+
+    public function afterKey($key, bool $strict = true): self
+    {
+        $this->resetBeforeAfter();
+
+        $this->after = $key;
+        $this->beforeAfterKey = true;
+        $this->strict = $strict;
+
+        return $this;
+    }
+
+    private function resetBeforeAfter(): self
+    {
+        $this->before = null;
+        $this->after = null;
+        $this->beforeAfterKey = false;
+        $this->strict = true;
+
+        return $this;
+    }
+
     /**
-     * Insert value before the specified value
+     * Insert element to array
      *
-     * @param mixed $before
-     * @param mixed $value
-     * @param string|null $key Optional key, when using assoc. array
-     * @param bool $strict Use strict comparison (same type and value)
+     * @param mixed $value Value to insert
+     * @param string|int|null $key Optional literal key to use for insertion
      * @return $this
      */
-    public function insertBefore($before, $value, ?string $key = null, bool $strict = true): self
+    public function insert($value, $key = null): self
     {
-        $new = [];
-        $should_insert = null;
+        if ($this->before !== null) {
+            $insert = [
+                $key ?? 0 => $value,
+            ];
 
-        foreach ($this->array as $k => $v) {
-            // If we haven't inserted the element yet....
-            if ($should_insert === null) {
-                // ... compare the values
-                if ($strict) {
-                    if ($v === $before) {
-                        $should_insert = true;
-                    }
-                }
-                /** @noinspection TypeUnsafeComparisonInspection */
-                elseif ($v == $before) {
-                    $should_insert = true;
-                }
-            }
-
-            if ($should_insert) {
-                if ($key) {
-                    $new[$key] = $value;
-                } else {
-                    $new[] = $value;
-                }
-
-                $should_insert = false; // Block further comparisons and insertions
-            }
-
-            if (is_string($k)) {
-                $new[$k] = $v;
+            if ($this->beforeAfterKey) {
+                $index = $this->positionOfKey($this->before, $this->strict);
             } else {
-                $new[] = $v;
+                $index = $this->positionOf($this->before, $this->strict);
             }
-        }
 
-        $this->array = $new;
-
-        return $this;
-    }
-
-    /**
-     * Insert the value before the specified key or index
-     *
-     * @param mixed $before
-     * @param mixed $value
-     * @param string|null $key Optional key, when using assoc. array
-     * @param bool $strict Use strict comparison (same type and value)
-     * @return $this
-     */
-    public function insertBeforeKey($before, $value, ?string $key = null, bool $strict = true): self
-    {
-        if (! array_key_exists($before, $this->array)) {
-            throw new InvalidArgumentException("The provided \"before\" key does not exist in the array!");
-        }
-
-        // inserting before specified index position
-        if (is_int($before)) {
+            if ($index === 1) {
+                // Prepend to the beginning of the array
+                $this->array = array_merge($insert, $this->array);
+            } elseif ($index !== null) {
+                // Slice and merge
+                $index--;
+                $this->array = array_merge(array_slice($this->array, 0, $index, true), $insert, array_slice($this->array, $index, null, true));
+            }
+        } elseif ($this->after !== null) {
             $insert = [
-                $value,
+                $key ?? 0 => $value,
             ];
 
-            $this->array = array_merge(array_slice($this->array, 0, $before), $insert, array_slice($this->array, $before));
-        }
-        // inserting before specified associative key
-        elseif (is_string($before)) {
-            $index = 0;
-            foreach ($this->array as $k => $element) {
-                $insert = [
-                    $key => $value,
-                ];
-
-                if ($strict) {
-                    if ($k === $before) {
-                        $this->array = array_merge(array_slice($this->array, 0, $index), $insert, array_slice($this->array, $index));
-                    }
-                }
-                /** @noinspection TypeUnsafeComparisonInspection */
-                elseif ($k == $before) {
-                    $this->array = array_merge(array_slice($this->array, 0, $index), $insert, array_slice($this->array, $index));
-                }
-
-                $index++;
+            if ($this->beforeAfterKey) {
+                $index = $this->positionOfKey($this->after, $this->strict);
+            } else {
+                $index = $this->positionOf($this->after, $this->strict);
             }
-        }
 
-        return $this;
-    }
-
-    /**
-     * Insert the value after the specified key or index
-     *
-     * @param mixed $after
-     * @param mixed $value
-     * @param string|null $key Optional key, when using assoc. array
-     * @param bool $strict Use strict comparison (same type and value)
-     * @return $this
-     */
-    public function insertAfterKey($after, $value, ?string $key = null, bool $strict = true): self
-    {
-        if (! array_key_exists($after, $this->array)) {
-            throw new InvalidArgumentException("The provided \"after\" key does not exist in the array!");
-        }
-
-        // inserting after specified index position
-        if (is_int($after)) {
-            $insert = [
-                $value,
-            ];
-
-            $this->array = array_merge(array_slice($this->array, 0, $after + 1), $insert, array_slice($this->array, $after + 1));
-        }
-        // inserting after specified associative key
-        elseif (is_string($after)) {
-            $index = 0;
-            foreach ($this->array as $k => $element) {
-                $insert = [
-                    $key => $value,
-                ];
-
-                if ($strict) {
-                    if ($k === $after) {
-                        $this->array = array_merge(array_slice($this->array, 0, $index + 1), $insert, array_slice($this->array, $index + 1));
-                    }
-                }
-                /** @noinspection TypeUnsafeComparisonInspection */
-                elseif ($k == $after) {
-                    $this->array = array_merge(array_slice($this->array, 0, $index + 1), $insert, array_slice($this->array, $index + 1));
-                }
-
-                $index++;
+            if ($index === count($this->array)) {
+                // Append to the end of the array
+                $this->array = array_merge($this->array, $insert);
+            } elseif ($index !== null) {
+                // Slice and merge
+                $this->array = array_merge(array_slice($this->array, 0, $index, true), $insert, array_slice($this->array, $index, null, true));
             }
+        } elseif ($key) {
+            // Append at the end with specified key
+            $this->array[$key] = $value;
+        } else {
+            // Append at the end
+            $this->array[] = $value;
         }
+
+        $this->resetBeforeAfter();
 
         return $this;
     }

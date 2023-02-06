@@ -65,83 +65,115 @@ class FluentArrayTest extends TestCase
     {
         // Test integers
         // -------------------------------------
-        $source = arr([1, 3, 4]);
+        $source = [1, 3, 4];
         $expected = [1, 2, 3, 4];
+        $actual = arr($source)->before(3)->insert(2)->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore(3, 2)->getArray());
+        $this->assertEquals($expected, $actual);
 
         // Test strings
         // -------------------------------------
-        $source = arr(["one", "three", "four"]);
+        $source = ["one", "three", "four"];
         $expected = ["one", "two", "three", "four"];
+        $actual = arr($source)->before("three")->insert("two")->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore("three", "two")->getArray());
+        $this->assertEquals($expected, $actual);
 
         // Test duplicate values
         // -------------------------------------
-        $source = arr([1, 3, 4, 5, 3, 6]);
+        $source = [1, 3, 4, 5, 3, 6];
         $expected = [1, 2, 3, 4, 5, 3, 6];
+        $actual = arr($source)->before(3)->insert(2)->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore(3, 2)->getArray());
+        $this->assertEquals($expected, $actual);
 
         // Test weak comparison
         // -------------------------------------
-        $source = arr([1, 3, 4]);
+        $source = [1, 3, 4];
         $expected = [1, 3, 4];
+        $actual = arr($source)->before("3")->insert(2)->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore("3", 2)->getArray());
+        $this->assertEquals($expected, $actual);
 
-        $source = arr([1, 3, 4]);
+        $source = [1, 3, 4];
         $expected = [1, 2, 3, 4];
+        $actual = arr($source)->before("3", false)->insert(2)->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore("3", 2, null, false)->getArray());
+        $this->assertEquals($expected, $actual);
 
         // Test associative array
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => "apple",
             "three" => "banana",
             "four" => "orange",
-        ]);
+        ];
         $expected = [
             "one" => "apple",
             "avocado",
             "three" => "banana",
             "four" => "orange",
         ];
+        $actual = arr($source)->before("banana")->insert("avocado")->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore("banana", "avocado")->getArray());
+        $this->assertEquals($expected, $actual);
 
         // Test insertion with specific key
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => "apple",
             "three" => "banana",
             "four" => "orange",
-        ]);
+        ];
         $expected = [
             "one" => "apple",
             "two" => "avocado",
             "three" => "banana",
             "four" => "orange",
         ];
+        $actual = arr($source)->before("banana")->insert("avocado", "two")->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore("banana", "avocado", "two")->getArray());
+        $this->assertEquals($expected, $actual);
 
         // Test insertion with specific key that already exists
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => "apple",
             "three" => "banana",
             "four" => "orange",
-        ]);
+        ];
         $expected = [
             "one" => "apple",
             "three" => "banana",
             "four" => "orange",
         ];
+        $actual = arr($source)->before("banana")->insert("avocado", "four")->getArray();
 
-        $this->assertEquals($expected, $source->insertBefore("banana", "avocado", "four")->getArray());
+        $this->assertEquals($expected, $actual);
+
+        // Test insertion at the beginning
+        // -------------------------------------
+        $source = [3, 4, 5];
+        $expected = [2, 3, 4, 5];
+        $actual = arr($source)->before(3)->insert(2)->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test insertion at the end
+        // -------------------------------------
+        $source = [3, 4, 5];
+        $expected = [3, 4, 5, 2];
+        $actual = arr($source)->insert(2)->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test insertion at the end - with key
+        // -------------------------------------
+        $source = [3, 4, 5];
+        $expected = [3, 4, 5, "two" => 2];
+        $actual = arr($source)->insert(2, "two")->getArray();
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -151,67 +183,180 @@ class FluentArrayTest extends TestCase
     {
         // Test insertion at the beginning of the array with a specific key
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => 1,
             "two" => 2,
             "four" => 4,
-        ]);
-        $expected = arr([
+        ];
+        $expected = [
             "zero" => 0,
             "one" => 1,
             "two" => 2,
             "four" => 4,
-        ]);
+        ];
+        $actual = arr($source)->beforeKey("one")->insert(0, "zero")->getArray();
 
-        $this->assertEquals($expected, $source->insertBeforeKey("one", 0, "zero"));
+        $this->assertEquals($expected, $actual);
 
         // Test insertion in the middle of the array with a specific key
         // -------------------------------------
-        $source = arr([
+        $source = [
            "one" => 1,
            "two" => 2,
            "four" => 4,
-        ]);
-        $expected = arr([
+        ];
+        $expected = [
             "one" => 1,
             "two" => 2,
             "three" => 3,
             "four" => 4,
-        ]);
+        ];
+        $actual = arr($source)->beforeKey("four", false)->insert(3, "three")->getArray();
 
-        $this->assertEquals($expected, $source->insertBeforeKey("four", 3, "three", false));
+        $this->assertEquals($expected, $actual);
 
         // Test insertion of the array with a specific key that does not exits
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => 1,
             "two" => 2,
             "four" => 4,
-        ]);
+        ];
+        $expected = $source;
+        $actual = arr($source)->beforeKey("five", false)->insert(3, "three")->getArray();
 
-        $this->expectExceptionMessage("The provided \"before\" key does not exist in the array!");
-        $source->insertBeforeKey("five", 3, "three", false);
+        $this->assertEquals($expected, $actual);
 
         // Test insertion at the beginning of the array with a position index
         // -------------------------------------
-        $source = arr([1, 2, 4]);
-        $expected = arr([0, 1, 2, 4]);
+        $source = [1, 2, 4];
+        $expected = [0, 1, 2, 4];
+        $actual = arr($source)->beforeKey(0)->insert(0)->getArray();
 
-        $this->assertEquals($expected, $source->insertBeforeKey(0, 0));
+        $this->assertEquals($expected, $actual);
 
         // Test insertion in the middle of the array with a position index
         // -------------------------------------
-        $source = arr([1, 2, 4]);
-        $expected = arr([1, 2, 3, 4]);
+        $source = [1, 2, 4];
+        $expected = [1, 2, 3, 4];
+        $actual = arr($source)->beforeKey(2)->insert(3)->getArray();
 
-        $this->assertEquals($expected, $source->insertBeforeKey(2, 3));
+        $this->assertEquals($expected, $actual);
 
         // Test insertion of the array with a position index that is out of range
         // -------------------------------------
-        $source = arr([1, 2, 4]);
-        $expected = arr([1, 2, 4]);
+        $source = [1, 2, 4];
+        $expected = [1, 2, 4];
+        $actual = arr($source)->beforeKey(100)->insert(3)->getArray();
 
-        $this->assertEquals($expected, $source->insertBeforeKey(100, 3));
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testInsertAfter(): void
+    {
+        // Test integers
+        // -------------------------------------
+        $source = [1, 2, 4];
+        $expected = [1, 2, 3, 4];
+        $actual = arr($source)->after(2)->insert(3)->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test strings
+        // -------------------------------------
+        $source = ["one", "two", "four"];
+        $expected = ["one", "two", "three", "four"];
+        $actual = arr($source)->after("two")->insert("three")->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test duplicate values
+        // -------------------------------------
+        $source = [1, 2, 4, 5, 2, 6];
+        $expected = [1, 2, 3, 4, 5, 2, 6];
+        $actual = arr($source)->after(2)->insert(3)->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test weak comparison
+        // -------------------------------------
+        $source = [1, 2, 4];
+        $expected = [1, 2, 4];
+        $actual = arr($source)->after("2")->insert(3)->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        $source = [1, 2, 4];
+        $expected = [1, 2, 3, 4];
+        $actual = arr($source)->after("2", false)->insert(3)->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test associative array
+        // -------------------------------------
+        $source = [
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+        $expected = [
+            "one" => "apple",
+            "avocado",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+        $actual = arr($source)->after("apple")->insert("avocado")->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test insertion with specific key
+        // -------------------------------------
+        $source = [
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+        $expected = [
+            "one" => "apple",
+            "two" => "avocado",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+        $actual = arr($source)->after("apple")->insert("avocado", "two")->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test insertion with specific key that already exists
+        // -------------------------------------
+        $source = [
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+        $expected = [
+            "one" => "apple",
+            "three" => "banana",
+            "four" => "orange",
+        ];
+        $actual = arr($source)->after("apple")->insert("avocado", "four")->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test insertion at the end
+        // -------------------------------------
+        $source = [3, 4, 5];
+        $expected = [3, 4, 5, 6];
+        $actual = arr($source)->insert(6)->getArray();
+
+        $this->assertEquals($expected, $actual);
+
+        // Test insertion at the end - with key
+        // -------------------------------------
+        $source = [3, 4, 5];
+        $expected = [3, 4, 5, "six" => 6];
+        $actual = arr($source)->insert(6, "six")->getArray();
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -221,60 +366,65 @@ class FluentArrayTest extends TestCase
     {
         // Test insertion at the end of the array with a specific key
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => 1,
             "two" => 2,
             "four" => 4,
-        ]);
-        $expected = arr([
+        ];
+        $expected = [
             "one" => 1,
             "two" => 2,
             "four" => 4,
             "five" => 5,
-        ]);
+        ];
+        $actual = arr($source)->afterKey("four")->insert(5, "five")->getArray();
 
-        $this->assertEquals($expected, $source->insertAfterKey("four", 5, "five"));
+        $this->assertEquals($expected, $actual);
 
         // Test insertion in the middle of the array with a specific key
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => 1,
             "two" => 2,
             "four" => 4,
-        ]);
-        $expected = arr([
+        ];
+        $expected = [
             "one" => 1,
             "two" => 2,
             "three" => 3,
             "four" => 4,
-        ]);
+        ];
+        $actual = arr($source)->afterKey("two", false)->insert(3, "three")->getArray();
 
-        $this->assertEquals($expected, $source->insertAfterKey("two", 3, "three", false));
+        $this->assertEquals($expected, $actual);
 
         // Test insertion of the array with a specific key that does not exits
         // -------------------------------------
-        $source = arr([
+        $source = [
             "one" => 1,
             "two" => 2,
             "four" => 4,
-        ]);
+        ];
+        $expected = $source;
+        $actual = arr($source)->afterKey("five", false)->insert(3, "three")->getArray();
 
-        $this->expectExceptionMessage("The provided \"after\" key does not exist in the array!");
-        $source->insertAfterKey("five", 3, "three", false);
+        $this->assertEquals($expected, $actual);
 
         // Test insertion in the middle of the array with a position index
         // -------------------------------------
-        $source = arr([1, 2, 4]);
-        $expected = arr([1, 2, 3, 4]);
+        $source = [1, 2, 4];
+        $expected = [1, 2, 3, 4];
+        $actual = arr($source)->afterKey(1)->insert(3)->getArray();
 
-        $this->assertEquals($expected, $source->insertAfterKey(1, 3));
+        $this->assertEquals($expected, $actual);
 
         // Test insertion at the end of the array with a position index
         // -------------------------------------
-        $source = arr([1, 2, 4]);
-        $expected = arr([1, 2, 4, 5]);
+        $source = [1, 2, 4];
+        $expected = [1, 2, 4, 5];
+        $actual = arr($source)->afterKey(2)->insert(5)->getArray();
 
-        $this->assertEquals($expected, $source->insertAfterKey(2, 5));
+        $this->assertEquals($expected, $actual);
     }
 
     /**
