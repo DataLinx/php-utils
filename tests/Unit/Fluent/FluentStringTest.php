@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class FluentStringTest extends TestCase
@@ -295,6 +296,7 @@ class FluentStringTest extends TestCase
 
     /**
      * @return void
+     * @noinspection HttpUrlsUsage
      */
     public function testExtractYouTubeHash(): void
     {
@@ -327,5 +329,42 @@ class FluentStringTest extends TestCase
         $this->assertFalse(str('test@snailmailgmail123456789.com')->isEmailDomainValid());
         $this->assertTrue(str('test@gmail.com')->isEmailDomainValid());
         $this->assertTrue(str('test@hotmail.com')->isEmailDomainValid());
+    }
+
+    public function testChunks(): void
+    {
+        $this->assertEquals(['Too short'], str('Too short')->chunks(10));
+
+        $str = 'The modification is a neutral cosmonaut.';
+        $this->assertEquals([$str], str($str)->chunks(mb_strlen($str) + 1));
+        $this->assertEquals([$str], str($str)->chunks(mb_strlen($str)));
+
+        $this->assertEquals(['The modification is ', 'a neutral cosmonaut.'], str($str)->chunks(20));
+        $this->assertEquals(['The modificatio', 'n is a neutral ', 'cosmonaut.'], str($str)->chunks(15));
+
+        $this->assertEquals(['The modifica', 'tion is a ne', 'utral cosmon', 'aut.'], str($str)->chunks(12));
+
+        // Test preventing word breaks
+        $this->assertEquals(['The', 'modification', 'is a neutral', 'cosmonaut.'], str($str)->chunks(12, true));
+        $this->assertEquals(['The', 'modificat.', 'is a', 'neutral', 'cosmonaut.'], str($str)->chunks(10, true));
+
+        // Abbreviating the first word
+        $str_2 = 'Something short';
+        $this->assertEquals(['Somet.', 'short'], str($str_2)->chunks(6, true));
+
+        // Abbreviating the last word
+        $str_3 = 'Longer something';
+        $this->assertEquals(['Longer', 'somet.'], str($str_3)->chunks(6, true));
+
+        // Abbreviating all
+        $str_4 = 'This looks strange';
+        $this->assertEquals(['Th.', 'lo.', 'st.'], str($str_4)->chunks(3, true));
+
+        // Multi-byte support
+        $this->assertEquals(['Kar je več', 'od šest', 'črk, je že', 'preveč'], str('Kar je več od šest črk, je že preveč')->chunks(10, true));
+
+        // Bad chunk size
+        $this->expectException(InvalidArgumentException::class);
+        str('test')->chunks(1);
     }
 }

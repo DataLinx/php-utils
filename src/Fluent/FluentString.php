@@ -2,6 +2,8 @@
 
 namespace DataLinx\PhpUtils\Fluent;
 
+use InvalidArgumentException;
+
 class FluentString
 {
     protected string $value;
@@ -380,5 +382,85 @@ class FluentString
         }
 
         return false;
+    }
+
+    /**
+     * <p>Break the string into chunks.</p>
+     * <p>If word breaking is allowed (which is by default), the function simply splits the string into pieces of desired length. Spaces will not be trimmed.</p>
+     * <p>If word breaking is not allowed, then the function will split the string into optimal chunks without breaking words and spaces will be trimmed.</p>
+     * <p>If a single word is longer than the chunk length, it will be abbreviated with a dot at the end.
+     * E.g.:
+     * <p><code>str('Something short')->chunks(6, true)</code></p>
+     * ... will be chunked into:
+     * <pre>
+     *  [
+     *      'Somet.',
+     *      'short',
+     *  ]
+     * </pre>
+     *
+     * @param int $length Chunk length
+     * @param bool $prevent_word_break Prevent word break
+     * @return string[]
+     */
+    public function chunks(int $length, bool $prevent_word_break = false): array
+    {
+        if ($length < 2) {
+            throw new InvalidArgumentException('Chunk length must be at least 2.');
+        }
+
+        if (mb_strlen($this->value) > $length) {
+            $chunks = [];
+            $str = $this->value;
+            if ($prevent_word_break) {
+                $words = explode(' ', $str);
+                $buffer = '';
+                foreach ($words as $word) {
+                    $add = null;
+                    $word_length = mb_strlen($word);
+                    if (mb_strlen(trim($buffer .' '. $word)) <= $length) {
+                        // The string can be appended to the previous chunk
+                        $buffer .= (empty($buffer) ? '' : ' ') . $word;
+                    } elseif ($word_length > $length) {
+                        // The word is longer than the chunk length, so abbreviate it and put a dot at the end
+                        $add = mb_substr($word, 0, $length - 1) . '.';
+                    } elseif ($word_length === $length) {
+                        // The word is long exactly as the chunk length
+                        $add = $word;
+                    } else {
+                        // The word cannot be appended to the buffer
+                        if (! empty($buffer)) {
+                            $chunks[] = $buffer;
+                        }
+                        $buffer = $word;
+                    }
+
+                    if (isset($add)) {
+                        // Is there something in the buffer?
+                        if (! empty($buffer)) {
+                            // Add it to the array and clear the buffer
+                            $chunks[] = $buffer;
+                            $buffer = '';
+                        }
+                        // Add the new chunk
+                        $chunks[] = $add;
+                    }
+                }
+                // If something is left in the buffer, add it
+                if (! empty($buffer)) {
+                    $chunks[] = $buffer;
+                }
+            } else {
+                while ($str !== '') {
+                    $chunk = mb_substr($str, 0, $length);
+                    $chunks[] = $chunk;
+                    $str = mb_substr($str, $length);
+                }
+            }
+
+            return $chunks;
+        }
+
+        return [$this->value];
     }
 }
