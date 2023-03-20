@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/DataLinx/php-utils/compare/v2.0.0...v2.1.0) (2023-03-20)
+
+
+### Features
+
+* **string:** implement string chunking method ([32083b4](https://github.com/DataLinx/php-utils/commit/32083b45a524c915f8a59f679544c420bcbfd49c))
+
 ## [2.0.0](https://github.com/DataLinx/php-utils/compare/v1.2.0...v2.0.0) (2023-02-06)
 
 
