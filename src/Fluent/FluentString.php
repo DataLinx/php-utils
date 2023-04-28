@@ -232,9 +232,10 @@ class FluentString
      * </code>
      *
      * @param array $placeholders
+     * @param bool $include_time Also parse time placeholders
      * @return $this
      */
-    public function parsePlaceholders(array $placeholders): self
+    public function parsePlaceholders(array $placeholders, bool $include_time = false): self
     {
         $from = [];
         $to = [];
@@ -250,7 +251,86 @@ class FluentString
 
         $this->value = str_replace($from, $to, $this->value);
 
+        if ($include_time) {
+            $this->parseTimePlaceholders();
+        }
+
         return $this;
+    }
+
+    /**
+     * Parse placeholder for date and time.
+     *
+     * Placeholders should be placed like this:
+     *
+     * ```
+     * The time is {%H}:{%i}:{%s}.
+     * ```
+     *
+     * See https://www.php.net/manual/en/datetime.format.php for placeholder reference.
+     *
+     * @param int|null $time Optional date/time to use (unix timestamp), instead of the current time.
+     * @return $this
+     */
+    public function parseTimePlaceholders(?int $time = NULL): self
+    {
+        static $chars = [
+            // Day
+            'd',
+            'D',
+            'j',
+            'l',
+            'S',
+            // Week
+            'w',
+            // Month
+            'z',
+            'W',
+            'F',
+            'm',
+            'M',
+            'n',
+            't',
+            // Year
+            'L',
+            'o',
+            'X',
+            'x',
+            'Y',
+            'y',
+            // Time
+            'a',
+            'A',
+            'B',
+            'g',
+            'G',
+            'h',
+            'H',
+            'i',
+            's',
+            'u',
+            'v',
+            // Timezone
+            'e',
+            'I',
+            'O',
+            'P',
+            'p',
+            'T',
+            'Z',
+            // Full date/time
+            'c',
+            'r',
+            'U',
+        ];
+
+        $placeholders = [];
+
+        foreach ($chars as $char) {
+            $placeholders["%$char"] = date($char, $time);
+        }
+
+        return $this->parsePlaceholders($placeholders);
     }
 
     /**

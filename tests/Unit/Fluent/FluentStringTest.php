@@ -239,6 +239,41 @@ class FluentStringTest extends TestCase
 
         $this->assertEquals("ISO-8859-2", mb_detect_encoding($str));
         $this->assertEquals(mb_convert_encoding("Živjo, Frančiška Žorž iz dišečega kraja Šared!", "ISO-8859-2", "UTF-8"), $str);
+
+        // Include time placeholders
+        // -------------
+        $expected = str('Hi {name}, the time is now {%r}!')->parsePlaceholders(['name' => 'George'], true)->getValue();
+
+        $this->assertEquals($expected, 'Hi George, the time is now ' . date('r') .'!');
+    }
+
+    public function testParseTimePlaceholders(): void
+    {
+        // Common usage
+        // -------------
+        $actual = str('The time is {%H}:{%i}:{%s}, while the date is {%D} {%j} {%M} {%Y}!')->parseTimePlaceholders()->getValue();
+        $expected = sprintf('The time is %s:%s:%s, while the date is %s %s %s %s!',
+            date('H'),
+            date('i'),
+            date('s'),
+            date('D'),
+            date('j'),
+            date('M'),
+            date('Y'),
+        );
+
+        $this->assertEquals($expected, $actual);
+
+        // Full date time
+        // -------------
+        $expected = str('Full date time is {%r}')->parseTimePlaceholders()->getValue();
+
+        $this->assertEquals($expected, 'Full date time is '. date('r'));
+
+        // Specific time
+        // -------------
+        $expected = str('Full date time is {%r}')->parseTimePlaceholders(strtotime('2023-01-01 12:21:12'))->getValue();
+        $this->assertEquals($expected, 'Full date time is '. date('r', strtotime('2023-01-01 12:21:12')));
     }
 
     /**
