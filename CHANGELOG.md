@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/DataLinx/php-utils/compare/v2.1.0...v2.2.0) (2023-04-29)
+
+
+### Features
+
+* **string:** implement date and time placeholder parsing ([9a3bf9d](https://github.com/DataLinx/php-utils/commit/9a3bf9dcdc2d84a2e11341a9c7bf23a80b9507f1))
+
+
+### Bug Fixes
+
+* **string:** fix time placeholder parsing for PHP 7.4 ([c6e06bd](https://github.com/DataLinx/php-utils/commit/c6e06bd216ece2f76921a546edbbe3a7bea83745))
+
 ## [2.1.0](https://github.com/DataLinx/php-utils/compare/v2.0.0...v2.1.0) (2023-03-20)
 
 
