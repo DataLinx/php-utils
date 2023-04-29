@@ -252,7 +252,8 @@ class FluentStringTest extends TestCase
         // Common usage
         // -------------
         $actual = str('The time is {%H}:{%i}:{%s}, while the date is {%D} {%j} {%M} {%Y}!')->parseTimePlaceholders()->getValue();
-        $expected = sprintf('The time is %s:%s:%s, while the date is %s %s %s %s!',
+        $expected = sprintf(
+            'The time is %s:%s:%s, while the date is %s %s %s %s!',
             date('H'),
             date('i'),
             date('s'),

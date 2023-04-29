@@ -272,7 +272,7 @@ class FluentString
      * @param int|null $time Optional date/time to use (unix timestamp), instead of the current time.
      * @return $this
      */
-    public function parseTimePlaceholders(?int $time = NULL): self
+    public function parseTimePlaceholders(?int $time = null): self
     {
         static $chars = [
             // Day
