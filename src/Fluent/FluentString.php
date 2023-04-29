@@ -327,7 +327,7 @@ class FluentString
         $placeholders = [];
 
         foreach ($chars as $char) {
-            $placeholders["%$char"] = date($char, $time);
+            $placeholders["%$char"] = date($char, $time ?? time());
         }
 
         return $this->parsePlaceholders($placeholders);
