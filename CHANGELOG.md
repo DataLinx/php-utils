@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/DataLinx/php-utils/compare/v2.2.0...v2.3.0) (2023-06-19)
+
+
+### Features
+
+* **array:** implement get method ([d5b4b00](https://github.com/DataLinx/php-utils/commit/d5b4b00b7290fc67e15ed5fae4a69d186e6582bc))
+
 ## [2.2.0](https://github.com/DataLinx/php-utils/compare/v2.1.0...v2.2.0) (2023-04-29)
 
 
