@@ -284,4 +284,39 @@ class FluentArray
 
         return $this;
     }
+
+    /**
+     * Get element(s) from array.
+     *
+     * If the passed key is an array, then an array with matching keys is returned.
+     * The resulting array will always be returned with preserved keys, even if they are integers.
+     *
+     * E.g.:
+     *
+     * ```php
+     * $arr = arr([
+     *      'one' => 'apple',
+     *      'two' => 'orange',
+     *      'three' => 'lemon',
+     * ]);
+     * var_dump($arr->get['one', 'three']);
+     * ```
+     *
+     * ... returns:
+     *
+     * ```php
+     * ['one' => 'apple', 'three' => 'lemon']
+     * ```
+     *
+     * @param int|string|array $key
+     * @return FluentArray|mixed|null
+     */
+    public function get($key)
+    {
+        if (is_array($key)) {
+            return new FluentArray(array_intersect_key($this->array, array_flip($key)));
+        }
+
+        return $this->array[$key] ?? null;
+    }
 }

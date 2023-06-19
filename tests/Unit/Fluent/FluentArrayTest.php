@@ -489,4 +489,34 @@ class FluentArrayTest extends TestCase
 
         $this->assertEquals($expected, $source->remove(["banana", "orange"])->toArray());
     }
+
+    public function testGet(): void
+    {
+        $source = arr(['apple', 'orange', 'lemon']);
+
+        $assoc_source = arr([
+            'one' => 'apple',
+            'two' => 'orange',
+            'three' => 'lemon',
+        ]);
+
+        // Get single element
+        $this->assertEquals('orange', $source->get(1));
+        $this->assertEquals('orange', $assoc_source->get('two'));
+
+        // Get multiple elements
+        $this->assertEquals([0 => 'apple', 2 => 'lemon'], $source->get([0, 2])->toArray());
+
+        $assoc_expected = [
+            'one' => 'apple',
+            'three' => 'lemon',
+        ];
+
+        $this->assertEquals($assoc_expected, $assoc_source->get(['one', 'three'])->toArray());
+
+        // Get non-existent element(s)
+        $this->assertNull($source->get(3));
+        $this->assertNull($assoc_source->get('four'));
+        $this->assertEquals([], $assoc_source->get(['four', 'five'])->toArray());
+    }
 }
