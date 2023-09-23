@@ -8,8 +8,8 @@ use RuntimeException;
 
 class FluentNumber
 {
-    const TYPE_DECIMAL = 'd';
-    const TYPE_INT = 'i';
+    public const TYPE_DECIMAL = 'd';
+    public const TYPE_INT = 'i';
 
     /**
      * @var float|int|string Number value
@@ -167,7 +167,7 @@ class FluentNumber
      * @param string|null $locale (Optional) Override the locale
      * @return string
      */
-    public function format(?int $decimals = NULL, ?int $trim_to_decimals = NULL, ?string $locale = NULL): string
+    public function format(?int $decimals = null, ?int $trim_to_decimals = null, ?string $locale = null): string
     {
         $formatter = $this->getFormatter($locale, null, $decimals, $trim_to_decimals);
 
@@ -192,7 +192,7 @@ class FluentNumber
      * @param string|null $locale (Optional) Override the locale
      * @return string
      */
-    public function asPercent(?int $decimals = NULL, ?int $trim_to_decimals = NULL, ?string $locale = NULL): string
+    public function asPercent(?int $decimals = null, ?int $trim_to_decimals = null, ?string $locale = null): string
     {
         $formatter = $this->getFormatter($locale, NumberFormatter::PERCENT, $decimals, $trim_to_decimals);
 
@@ -216,7 +216,7 @@ class FluentNumber
      * @param string|null $locale (Optional) Override the locale
      * @return string
      */
-    public function asMoney(string $currency, ?int $decimals = NULL, ?int $trim_to_decimals = NULL, ?string $locale = NULL): string
+    public function asMoney(string $currency, ?int $decimals = null, ?int $trim_to_decimals = null, ?string $locale = null): string
     {
         $formatter = $this->getFormatter($locale, NumberFormatter::CURRENCY, $decimals, $trim_to_decimals);
 
