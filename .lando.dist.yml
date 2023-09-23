@@ -1,7 +1,7 @@
 name: php-utils
 services:
   appserver:
-    type: php:8.1
+    type: php:custom
     via: cli
     webroot: .
     xdebug: "debug,coverage,develop"
@@ -10,6 +10,8 @@ services:
         # Support debugging CLI with XDEBUG.
         PHP_IDE_CONFIG: "serverName=appserver"
         XDEBUG_SESSION_START: lando
+      build: ./config
+      image: datalinx/php:8.1-php-utils
 tooling:
   php:
     service: appserver
