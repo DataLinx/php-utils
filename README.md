@@ -14,9 +14,9 @@ See the changelog [here](CHANGELOG.md).
 
 ## Requirements
 - PHP >= 7.4
-- `mbstring` PHP extension
+- `mbstring` and `intl` PHP extensions
 - `picqer/php-barcode-generator` package, if you want to use the `FluentBarcode` wrapper
-- Linux and Windows Server are supported
+- Linux server is supported
 
 ## Installing
 Download it with composer:
