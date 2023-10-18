@@ -253,4 +253,29 @@ class FluentNumberTest extends TestCase
         $this->assertEquals("1\u{00A0}234\u{00A0}567,89\u{00A0}¥", $amount->asMoney('JPY'));
         $this->assertEquals("1\u{00A0}234\u{00A0}567,89\u{00A0}р.", $amount->asMoney('RUR'));
     }
+
+    public function testAsFileSize(): void
+    {
+        setlocale(LC_MESSAGES, 'en_US');
+
+        $this->assertEquals("123\u{00A0}B", num(123)->asFileSize());
+
+        $this->assertEquals("1.23\u{00A0}kB", num(1234)->asFileSize());
+        $this->assertEquals("1.234\u{00A0}kB", num(1234)->asFileSize(3));
+
+        $this->assertEquals("1.23\u{00A0}MB", num(1234567)->asFileSize());
+        $this->assertEquals("1.23\u{00A0}GB", num(1234567890)->asFileSize());
+        $this->assertEquals("1.23\u{00A0}TB", num(1234567890000)->asFileSize());
+        $this->assertEquals("1.23\u{00A0}PB", num(1234567890000000)->asFileSize());
+    }
+
+    public function testInvalidFileSize(): void
+    {
+        $num = num(123.45);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Only integer values can be formatted as file size!');
+
+        $num->asFileSize();
+    }
 }

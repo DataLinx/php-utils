@@ -228,4 +228,27 @@ class FluentNumber
 
         return $str;
     }
+
+    /**
+     * Format number as file size to the largest unit possible, given that the value was in bytes.
+     *
+     * @param int $decimals Decimals to round to
+     * @return string
+     */
+    public function asFileSize(int $decimals = 2): string
+    {
+        static $suffixes = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
+
+        if (! $this->isInteger()) {
+            throw new InvalidArgumentException('Only integer values can be formatted as file size!');
+        }
+
+        if ($this->value < 1000) {
+            return $this->format() ."\u{00A0}B";
+        } else {
+            $base = log($this->value, 1000);
+
+            return (new static(pow(1000, $base - floor($base))))->format($decimals) ."\u{00A0}". $suffixes[floor($base)];
+        }
+    }
 }
