@@ -251,4 +251,61 @@ class FluentNumber
             return (new static(pow(1000, $base - floor($base))))->format($decimals) ."\u{00A0}". $suffixes[floor($base)];
         }
     }
+
+    /**
+     * Format number as simple time interval, given that the internal value is in seconds.
+     * This is simple function, suitable only for small intervals from a second up to a few days. For better output, use the `diffForHumans()` method from the Carbon library.
+     *
+     * E.g.
+     * ```
+     * echo num(60)->asTimeInterval(); // 1m
+     * echo num(61)->asTimeInterval(); // 1m 1s
+     * echo num(3600)->asTimeInterval(); // 1h
+     * echo num(48 * 3600 + 5 * 3600 + 30)->asTimeInterval(); // 2d 5h 30s
+     * ```
+     *
+     * @param string $precision Max. precision (s = seconds, m = minutes, h = hours, d = days)
+     * @return string
+     */
+    public function asTimeInterval(string $precision = 's'): string
+    {
+        if ((int)$this->value === 0) {
+            return '0'. $precision;
+        }
+
+        $parts = [
+            'd' => 0,
+            'h' => floor($this->value / 3600),
+        ];
+
+        if ($parts['h'] >= 24) {
+            $parts['d'] = floor($parts['h'] / 24);
+
+            if ($parts['d'] >= 1) {
+                $parts['h'] = $parts['h'] - ($parts['d'] * 24);
+            }
+        }
+
+        $seconds = $this->value - (3600 * ($parts['h'] + $parts['d'] * 24));
+
+        $parts['m'] = floor($seconds / 60);
+
+        $parts['s'] = $seconds % 60;
+
+        $str = '';
+
+        static $units = ['d', 'h', 'm', 's'];
+
+        foreach ($units as $unit) {
+            if ($parts[$unit] > 0) {
+                $str .= $parts[$unit] . $unit .' ';
+            }
+
+            if ($precision === $unit) {
+                break;
+            }
+        }
+
+        return empty($str) ? '0'. $precision : trim($str);
+    }
 }
