@@ -78,8 +78,6 @@ class FluentNumberTest extends TestCase
         // Valid integers
         $this->assertTrue(num(123)->isInteger());
         $this->assertTrue(num(-123)->isInteger());
-        $this->assertTrue(num((int)'123')->isInteger());
-        $this->assertTrue(num((int)'-123')->isInteger());
 
         // Invalid integers
         $this->assertFalse(num(123.45)->isInteger());

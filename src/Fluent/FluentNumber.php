@@ -28,15 +28,9 @@ class FluentNumber
      */
     public function __construct($value)
     {
-        $this->value = $value;
+        $this->setType($value);
 
-        if (is_int($value)) {
-            $this->type = self::TYPE_INT;
-        } elseif (is_numeric($value)) {
-            $this->type = self::TYPE_DECIMAL;
-        } else {
-            throw new InvalidArgumentException('Value is not numeric');
-        }
+        $this->value = $value;
     }
 
     /**
@@ -48,11 +42,13 @@ class FluentNumber
     }
 
     /**
-     * @param float $value
+     * @param float|int|string $value
      * @return FluentNumber
      */
-    public function setValue(float $value): FluentNumber
+    public function setValue($value): FluentNumber
     {
+        $this->setType($value);
+
         $this->value = $value;
 
         return $this;
@@ -343,5 +339,24 @@ class FluentNumber
         }
 
         return new static($result);
+    }
+
+    /**
+     * Set internal type by value
+     *
+     * @param float|int|string $value
+     * @return $this
+     */
+    protected function setType($value): self
+    {
+        if (is_int($value)) {
+            $this->type = self::TYPE_INT;
+        } elseif (is_numeric($value)) {
+            $this->type = self::TYPE_DECIMAL;
+        } else {
+            throw new InvalidArgumentException('Value is not numeric');
+        }
+
+        return $this;
     }
 }
