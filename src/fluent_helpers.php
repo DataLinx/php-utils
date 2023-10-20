@@ -66,3 +66,30 @@ if (! function_exists('directory')) {
         return new FluentDirectory($path);
     }
 }
+
+if (! function_exists('parse_number')) {
+    /**
+     * Parse a numeric value that is formatted for the current locale.
+     * This is a simplified helper function of the FluentNumber::parse() method. When more control is desired, use that instead.
+     *
+     * Example:
+     * ```
+     * setlocale(LC_MESSAGES, 'en_US');
+     * echo parse_number('123.45'); // 123.45
+     * echo parse_number('123,45'); // NULL
+     * echo parse_number('123,45', 'sl_SI'); // 123.45
+     * ```
+     *
+     * @param string $value Value to parse
+     * @param string|null $locale Override locale (PHP setting for `LC_MESSAGES` is used by default)
+     * @return float|null Float value or `null` on failure
+     */
+    function parse_number(string $value, string $locale = null): ?float
+    {
+        try {
+            return FluentNumber::parse($value, $locale)->getValue();
+        } catch (Exception $exception) {
+            return null;
+        }
+    }
+}

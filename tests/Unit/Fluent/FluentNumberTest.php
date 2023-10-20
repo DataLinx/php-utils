@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace DataLinx\PhpUtils\Tests\Unit\Fluent;
 
+use DataLinx\PhpUtils\Fluent\FluentNumber;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class FluentNumberTest extends TestCase
 {
@@ -303,5 +305,76 @@ class FluentNumberTest extends TestCase
         $this->assertEquals('1d 1h 1m', num($day + $hour + $minute)->asTimeInterval());
         $this->assertEquals('1d 1h 1m 1s', num($day + $hour + $minute + 1)->asTimeInterval());
         $this->assertEquals('100d 1h 1m 1s', num(100 * $day + $hour + $minute + 1)->asTimeInterval());
+    }
+
+    public function testParse(): void
+    {
+        setlocale(LC_MESSAGES, 'en_US');
+
+        $this->assertEquals(100, FluentNumber::parse('100')->getValue());
+        $this->assertEquals(123.45, FluentNumber::parse('123.45')->getValue());
+        $this->assertEquals(12345, FluentNumber::parse('12345')->getValue());
+        $this->assertEquals(12345, FluentNumber::parse('12,345')->getValue());
+        $this->assertEquals(12345.67, FluentNumber::parse('12345.67')->getValue());
+        $this->assertEquals(12345.67, FluentNumber::parse('12,345.67')->getValue());
+        $this->assertEquals(1234567, FluentNumber::parse('1234567')->getValue());
+        $this->assertEquals(1234567, FluentNumber::parse('1,234,567')->getValue());
+        $this->assertEquals(1234567.89, FluentNumber::parse('1234567.89')->getValue());
+        $this->assertEquals(1234567.89, FluentNumber::parse('1,234,567.89')->getValue());
+
+        setlocale(LC_MESSAGES, 'sl_SI');
+
+        $this->assertEquals(100, FluentNumber::parse('100')->getValue());
+        $this->assertEquals(123.45, FluentNumber::parse('123,45')->getValue());
+        $this->assertEquals(12345, FluentNumber::parse('12345')->getValue());
+        $this->assertEquals(12345, FluentNumber::parse('12.345')->getValue());
+        $this->assertEquals(12345.67, FluentNumber::parse('12345,67')->getValue());
+        $this->assertEquals(12345.67, FluentNumber::parse('12.345,67')->getValue());
+        $this->assertEquals(1234567, FluentNumber::parse('1234567')->getValue());
+        $this->assertEquals(1234567, FluentNumber::parse('1.234.567')->getValue());
+        $this->assertEquals(1234567.89, FluentNumber::parse('1234567,89')->getValue());
+        $this->assertEquals(1234567.89, FluentNumber::parse('1.234.567,89')->getValue());
+
+        // Locales like French should support both dot and narrow non-breaking space for the thousands separator
+        setlocale(LC_MESSAGES, 'fr_FR');
+
+        $this->assertEquals(100, FluentNumber::parse('100')->getValue());
+        $this->assertEquals(123.45, FluentNumber::parse('123,45')->getValue());
+        $this->assertEquals(12345, FluentNumber::parse('12.345')->getValue());
+        $this->assertEquals(12345, FluentNumber::parse("12\u{202F}345")->getValue());
+        $this->assertEquals(12345.67, FluentNumber::parse('12.345,67')->getValue());
+        $this->assertEquals(12345.67, FluentNumber::parse("12\u{202F}345,67")->getValue());
+        $this->assertEquals(1234567.89, FluentNumber::parse('1.234.567,89')->getValue());
+        $this->assertEquals(1234567.89, FluentNumber::parse("1\u{202F}234\u{202F}567,89")->getValue());
+
+        // Test changing locale on-the-fly
+        $this->assertEquals(1234567.89, FluentNumber::parse('1,234,567.89', 'en_US')->getValue());
+
+        // Test full circle
+        setlocale(LC_MESSAGES, 'sl_SI');
+        $this->assertEquals('1.234.567,89', (string)FluentNumber::parse('1.234.567,89'));
+    }
+
+    public function testParseError(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('NumberFormatter failed to parse the value "123,45"! Error message: Number parsing failed: U_PARSE_ERROR');
+
+        FluentNumber::parse('123,45', 'en_US');
+    }
+
+    public function testParseEmptyError(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('NumberFormatter failed to parse the value ""! Error message: Number parsing failed: U_PARSE_ERROR');
+
+        FluentNumber::parse('');
+    }
+
+    public function testParseNumberHelper(): void
+    {
+        $this->assertEquals(123.45, parse_number('123.45', 'en_US'));
+        $this->assertEquals(123.45, parse_number('123,45', 'sl_SI'));
+        $this->assertNull(parse_number('123,45', 'en_US'));
     }
 }

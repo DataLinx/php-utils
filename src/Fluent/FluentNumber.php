@@ -308,4 +308,40 @@ class FluentNumber
 
         return empty($str) ? '0'. $precision : trim($str);
     }
+
+    /**
+     * Parse a numeric value that is formatted for the current locale.
+     *
+     * Example:
+     * ```
+     * setlocale(LC_MESSAGES, 'en_US');
+     * echo parse_number('123.45'); // 123.45
+     * echo parse_number('123,45'); // NULL
+     * echo parse_number('123,45', 'sl_SI'); // 123.45
+     * ```
+     *
+     * @param string $value Value to parse
+     * @param string|null $locale Override locale (PHP setting for `LC_MESSAGES` is used by default)
+     * @return self
+     */
+    public static function parse(string $value, string $locale = null): self
+    {
+        static $parser;
+
+        if (empty($locale)) {
+            $locale = setlocale(LC_MESSAGES, '0');
+        }
+
+        if (! isset($parser[$locale])) {
+            $parser[$locale] = new NumberFormatter($locale, NumberFormatter::DEFAULT_STYLE);
+        }
+
+        $result = $parser[$locale]->parse($value);
+
+        if ($result === false) {
+            throw new RuntimeException(sprintf('NumberFormatter failed to parse the value "%s"! Error message: %s', $value, $parser[$locale]->getErrorMessage()));
+        }
+
+        return new static($result);
+    }
 }
