@@ -543,4 +543,41 @@ class FluentString
 
         return [$this->value];
     }
+
+    /**
+     * Get string length. This does not trim the string. Any space characters are included in the count.
+     *
+     * @return int
+     */
+    public function getLength(): int
+    {
+        return empty($this->value) ? 0 : mb_strlen($this->value);
+    }
+
+    /**
+     * Test if the string is empty. The check if performed on a trimmed copy of the string, so any number of space
+     * characters will still be considered an empty string.
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        $copy = clone $this;
+
+        return $copy->trim()->value === '';
+    }
+
+    /**
+     * Test if the string has HTML tags. This method is best-effort — it compares the string with a `htmlToPlain()`
+     * version to determine if the strings are of equal length.
+     *
+     * @return bool
+     */
+    public function hasHtmlTags(): bool
+    {
+        $plain = clone $this;
+        $plain->htmlToPlain();
+
+        return $this->getLength() > $plain->getLength();
+    }
 }

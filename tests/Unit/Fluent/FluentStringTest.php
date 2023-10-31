@@ -403,4 +403,32 @@ class FluentStringTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         str('test')->chunks(1);
     }
+
+    public function testGetLength(): void
+    {
+        $this->assertEquals(0, str('')->getLength());
+        $this->assertEquals(3, str('foo')->getLength());
+        $this->assertEquals(8, str('foočćžšđ')->getLength());
+    }
+
+    public function testIsEmpty(): void
+    {
+        $this->assertTrue(str('')->isEmpty());
+        $this->assertTrue(str(' ')->isEmpty());
+        $this->assertTrue(str('    ')->isEmpty());
+        $this->assertTrue(str("\u{2000}")->isEmpty());
+
+        $this->assertFalse(str('0')->isEmpty());
+        $this->assertFalse(str('abc')->isEmpty());
+    }
+
+    public function testHasHtmlTags(): void
+    {
+        $this->assertTrue(str('<p>Hi!</p>')->hasHtmlTags());
+        $this->assertTrue(str('Hi!<hr/>')->hasHtmlTags());
+        $this->assertTrue(str('<h1>Hello</h1>'. PHP_EOL . '<h2>world!</h2>')->hasHtmlTags());
+
+        $this->assertFalse(str('Hi!')->hasHtmlTags());
+        $this->assertTrue(str('Hello'. PHP_EOL . 'world!')->hasHtmlTags());
+    }
 }
