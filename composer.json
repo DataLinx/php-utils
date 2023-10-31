@@ -33,6 +33,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.13",
+        "giggsey/libphonenumber-for-php": "^8.13",
         "nesbot/carbon": "^2.71",
         "phpunit/phpunit": "^9.5.26",
         "picqer/php-barcode-generator": "^2.2.4"
@@ -41,7 +42,8 @@
         "picqer/php-barcode-generator": "Required to use FluentBarcode",
         "ext-gd": "For FluentBarcode JPG and PNG generators, GD or Imagick is required",
         "ext-imagick": "For FluentBarcode JPG and PNG generators, GD or Imagick is required",
-        "nesbot/carbon": "Required for the Carbon date/time helpers"
+        "nesbot/carbon": "Required for the Carbon date/time helpers",
+        "giggsey/libphonenumber-for-php": "Required for the phone number helper"
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
