@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.4.0](https://github.com/DataLinx/php-utils/compare/v2.3.0...v2.4.0) (2023-10-31)
+
+
+### Features
+
+* **datetime:** implement date and time parsing and formatting helper functions ([61c0830](https://github.com/DataLinx/php-utils/commit/61c083012deae7079659fccec80b68ca14776afc))
+* **number:** implement number formatting as file size ([5d9674d](https://github.com/DataLinx/php-utils/commit/5d9674dffe7adccb88883f0fcd964266d4e18dba))
+* **number:** implement number formatting as simple time interval ([2026774](https://github.com/DataLinx/php-utils/commit/20267741d2d195771c4cbaf60616238fc771b4c8))
+* **number:** implement number parsing ([7c894cb](https://github.com/DataLinx/php-utils/commit/7c894cb70dc4d9a56bc45d5ad6b7035fee763f22))
+* **number:** implement number, percent and money formatting ([f2c8fe5](https://github.com/DataLinx/php-utils/commit/f2c8fe558d28c807bf42495ab1bb8ed70b0c5524))
+* **number:** improve internal type setting ([9b96cc0](https://github.com/DataLinx/php-utils/commit/9b96cc0962e407108b2c0766731ef51d96d4b344))
+* **phone_number:** add fluent wrapper for libphonenumber ([ae23a97](https://github.com/DataLinx/php-utils/commit/ae23a9759769c6cc27d21c9a5348beab54acd4c8))
+* **string:** add getLength, isEmpty and hasHtmlTags methods ([eccf21f](https://github.com/DataLinx/php-utils/commit/eccf21fd656abbf41fa22230ba1b4ede5728504c))
+
 ## [2.3.0](https://github.com/DataLinx/php-utils/compare/v2.2.0...v2.3.0) (2023-06-19)
 
 
