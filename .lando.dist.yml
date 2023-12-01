@@ -4,8 +4,7 @@ services:
     type: php:custom
     via: cli
     overrides:
-      build: ./config
-      image: datalinx/php:7.4-php-utils
+      image: slimdeluxe/php:7.4
 tooling:
   php:
     service: appserver
