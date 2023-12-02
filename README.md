@@ -2,10 +2,11 @@
 
 ![Packagist Version](https://img.shields.io/packagist/v/datalinx/php-utils)
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/datalinx/php-utils)
-[![codecov](https://codecov.io/gh/DataLinx/php-utils/branch/master/graph/badge.svg?token=47T4ZAX33D)](https://codecov.io/gh/DataLinx/php-utils)
-![Packagist License](https://img.shields.io/packagist/l/datalinx/php-utils)
 ![Packagist Downloads](https://img.shields.io/packagist/dt/datalinx/php-utils)
-[![Test runner](https://github.com/DataLinx/php-utils/actions/workflows/run-tests.yml/badge.svg)](https://github.com/DataLinx/php-utils/actions/workflows/run-tests.yml)
+[![Test runner](https://github.com/DataLinx/php-utils/actions/workflows/test-runner.yml/badge.svg)](https://github.com/DataLinx/php-utils/actions/workflows/test-runner.yml)
+[![codecov](https://codecov.io/gh/DataLinx/php-utils/branch/master/graph/badge.svg?token=47T4ZAX33D)](https://codecov.io/gh/DataLinx/php-utils)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
+![Packagist License](https://img.shields.io/packagist/l/datalinx/php-utils)
 
 ## About
 This package is a collection of classes that provide a fluent OOP interface to manipulate common primitive data types such as strings, numbers, arrays and other structures by providing a lean wrapper around libraries from other packages. 
@@ -41,13 +42,10 @@ echo str('My  string')->clean(); // Outputs: My string
 ```
 You can also create your own helper functions to create new instances, if the ones this library provides do not suite you or already exist in your project. **The library-provided helper functions are not loaded by default**.
 
-## Function documentation
-_Auto-generated documentation coming soon._
-
 ## Contributing
 If you have some suggestions how to make this package better, please open an issue or even better, submit a pull request.
 
-The project adheres to the PSR-4 and PSR-12 standards.
+Should you want to contribute, please see the development guidelines in the [DataLinx PHP package template](https://github.com/DataLinx/php-package-template).
 
 ### Changelog
 All notable changes to this project are automatically documented in the [CHANGELOG.md](CHANGELOG.md) file using the release workflow, based on the [release-please](https://github.com/googleapis/release-please) GitHub action.
