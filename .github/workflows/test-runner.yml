@@ -27,21 +27,21 @@ jobs:
       fail-fast: true
       matrix:
         os: [ ubuntu-latest ]
-        php: [ 7.4, 8.0, 8.1 ]
+        php: [ 7.4, 8.0, 8.1, 8.2 ]
         dependency-version: [ prefer-lowest, prefer-stable ]
 
     name: ${{ matrix.os }} / PHP ${{ matrix.php }} / ${{ matrix.dependency-version }}
 
     steps:
 
+      - name: Set up system locales
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y locales locales-all
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-
-      - name: Set up system locales
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install -y locales locales-all
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
