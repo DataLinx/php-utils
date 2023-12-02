@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/DataLinx/php-utils/compare/v2.4.0...v2.4.1) (2023-12-02)
+
+
+### Miscellaneous Chores
+
+* update .gitignore and add .idea config ([e721dfe](https://github.com/DataLinx/php-utils/commit/e721dfeab045bcc8d7308359cebdf27c25ac3dc6))
+
 ## [2.4.0](https://github.com/DataLinx/php-utils/compare/v2.3.0...v2.4.0) (2023-10-31)
 
 
