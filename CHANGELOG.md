@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.0](https://github.com/DataLinx/php-utils/compare/v2.4.0...v2.5.0) (2024-07-10)
+
+
+### Features
+
+* **number:** add parameter for starting unit in asTimeInterval() ([c2c24be](https://github.com/DataLinx/php-utils/commit/c2c24be7b62cec2c96792815ed12c33a441e99c0))
+
+
+### Miscellaneous Chores
+
+* update .gitignore and add .idea config ([e721dfe](https://github.com/DataLinx/php-utils/commit/e721dfeab045bcc8d7308359cebdf27c25ac3dc6))
+
 ## [2.4.0](https://github.com/DataLinx/php-utils/compare/v2.3.0...v2.4.0) (2023-10-31)
 
 
