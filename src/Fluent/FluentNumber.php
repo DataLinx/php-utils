@@ -250,7 +250,7 @@ class FluentNumber
 
     /**
      * Format number as simple time interval, given that the internal value is in seconds.
-     * This is simple function, suitable only for small intervals from a second up to a few days. For better output, use the `diffForHumans()` method from the Carbon library.
+     * This is a simple function, suitable only for small intervals from a second up to a few days. For better output, use the `diffForHumans()` method from the Carbon library.
      *
      * E.g.
      * ```
@@ -261,32 +261,39 @@ class FluentNumber
      * ```
      *
      * @param string $precision Max. precision (s = seconds, m = minutes, h = hours, d = days)
+     * @param string $start Starting unit (default: d, also supported: h, m)
      * @return string
      */
-    public function asTimeInterval(string $precision = 's'): string
+    public function asTimeInterval(string $precision = 's', string $start = 'd'): string
     {
         if ((int)$this->value === 0) {
             return '0'. $precision;
         }
 
+        $seconds = $this->value;
+        $hour = 60 * 60;
+        $day = 24 * $hour;
+
         $parts = [
             'd' => 0,
-            'h' => floor($this->value / 3600),
+            'h' => 0,
         ];
 
-        if ($parts['h'] >= 24) {
-            $parts['d'] = floor($parts['h'] / 24);
+        if ($start === 'd' && $seconds >= $day) {
+            $parts['d'] = floor($seconds / $day);
 
-            if ($parts['d'] >= 1) {
-                $parts['h'] = $parts['h'] - ($parts['d'] * 24);
-            }
+            $seconds -= $parts['d'] * $day;
         }
 
-        $seconds = $this->value - (3600 * ($parts['h'] + $parts['d'] * 24));
+        if (($start === 'h' || $start === 'd') && $seconds >= $hour) {
+            $parts['h'] = floor($seconds / $hour);
+
+            $seconds -= $parts['h'] * $hour;
+        }
 
         $parts['m'] = floor($seconds / 60);
 
-        $parts['s'] = $seconds % 60;
+        $parts['s'] = $seconds - $parts['m'] * 60;
 
         $str = '';
 

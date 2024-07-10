@@ -303,6 +303,27 @@ class FluentNumberTest extends TestCase
         $this->assertEquals('1d 1h 1m', num($day + $hour + $minute)->asTimeInterval());
         $this->assertEquals('1d 1h 1m 1s', num($day + $hour + $minute + 1)->asTimeInterval());
         $this->assertEquals('100d 1h 1m 1s', num(100 * $day + $hour + $minute + 1)->asTimeInterval());
+
+        // Starting with hours
+        $this->assertEquals('24h', num($day)->asTimeInterval('s', 'h'));
+        $this->assertEquals('24h 1s', num($day + 1)->asTimeInterval('s', 'h'));
+        $this->assertEquals('24h 1m', num($day + $minute)->asTimeInterval('s', 'h'));
+        $this->assertEquals('25h', num($day + $hour)->asTimeInterval('s', 'h'));
+        $this->assertEquals('25h 1m', num($day + $hour + $minute)->asTimeInterval('s', 'h'));
+        $this->assertEquals('25h', num($day + $hour + $minute + 1)->asTimeInterval('h', 'h'));
+        $this->assertEquals('25h 1m 1s', num($day + $hour + $minute + 1)->asTimeInterval('s', 'h'));
+        $this->assertEquals('25h 1m', num($day + $hour + $minute + 1)->asTimeInterval('m', 'h'));
+        $this->assertEquals('25h', num($day + $hour + $minute + 1)->asTimeInterval('h', 'h'));
+        $this->assertEquals('241h 1m 1s', num(10 * $day + $hour + $minute + 1)->asTimeInterval('s', 'h'));
+
+        // Starting with minutes
+        $this->assertEquals('1440m', num($day)->asTimeInterval('s', 'm'));
+        $this->assertEquals('1440m 1s', num($day + 1)->asTimeInterval('s', 'm'));
+        $this->assertEquals('1440m', num($day + 1)->asTimeInterval('m', 'm'));
+        $this->assertEquals('1441m', num($day + $minute)->asTimeInterval('s', 'm'));
+        $this->assertEquals('1500m', num($day + $hour)->asTimeInterval('s', 'm'));
+        $this->assertEquals('1501m', num($day + $hour + $minute)->asTimeInterval('s', 'm'));
+        $this->assertEquals('1501m 1s', num($day + $hour + $minute + 1)->asTimeInterval('s', 'm'));
     }
 
     public function testParse(): void
