@@ -357,6 +357,11 @@ class FluentStringTest extends TestCase
     {
         $this->assertEquals('Test', str('﻿﻿Test﻿﻿')->trim());
         $this->assertEquals('Test', str("\u{2000}\u{2001}\u{2002}\u{2003}\u{2004}\u{2005}\u{2006}\u{2007}\u{2008}\u{2009}Test\u{2000}\u{2001}\u{2002}\u{2003}\u{2004}\u{2005}\u{2006}\u{2007}\u{2008}\u{2009}")->trim());
+
+        $this->assertEquals('Test', str('Test_x000d_')->trim());
+        $this->assertEquals('Test', str('_x000d_Test')->trim());
+        $this->assertEquals('Test', str('_x000d_Test_x000d_')->trim());
+        $this->assertEquals('Test one _x000d_ two three', str('_x000d_Test one _x000d_ two three_x000d_')->trim());
     }
 
     public function testIsEmailDomainValid(): void

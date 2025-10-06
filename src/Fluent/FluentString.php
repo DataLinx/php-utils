@@ -437,13 +437,18 @@ class FluentString
     }
 
     /**
-     * Trim the string - supports unicode spaces
+     * Trim the string - supports Unicode spaces and Excel control characters
      *
      * @return $this
      */
     public function trim(): self
     {
-        $this->value = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $this->value);
+        // 1) Remove Excel’s inline CR/LF escape tokens that appear as text
+        //    Handles case-insensitive _x000D_ and _x000A_
+        $this->value = preg_replace('/^(_x000[da]_)+|(_x000[da]_)+$/i', '', $this->value);
+
+        // 2) Now trim real Unicode separators and control chars, including CR/LF
+        $this->value = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', trim($this->value));
 
         return $this;
     }
