@@ -227,8 +227,7 @@ class FluentArray
                     return $pos;
                 }
             }
-            /** @noinspection TypeUnsafeComparisonInspection */
-            elseif ($element == $value) {
+            /** @noinspection TypeUnsafeComparisonInspection */ elseif ($element == $value) {
                 return $pos;
             }
             $pos++;
@@ -254,8 +253,7 @@ class FluentArray
                     return $pos;
                 }
             }
-            /** @noinspection TypeUnsafeComparisonInspection */
-            elseif ($e_key == $key) {
+            /** @noinspection TypeUnsafeComparisonInspection */ elseif ($e_key == $key) {
                 return $pos;
             }
             $pos++;
