@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/DataLinx/php-utils/compare/v2.5.0...v2.6.0) (2025-10-06)
+
+
+### Features
+
+* **string:** improve trim() to handle Excel control characters ([3c3ebaf](https://github.com/DataLinx/php-utils/commit/3c3ebafba369b3f24dd23d4980d7c10fae1f16fa))
+
 ## [2.5.0](https://github.com/DataLinx/php-utils/compare/v2.4.0...v2.5.0) (2024-07-10)
 
 
